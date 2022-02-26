@@ -1,4 +1,5 @@
 import useSWR from "swr";
+import Image from "next/image";
 import styles from "../index.module.scss";
 
 function HomePage() {
@@ -11,7 +12,7 @@ function HomePage() {
     <div>
       <h1 className={styles.mainHeader}>movielister</h1>
       <h3>{movie.Title}</h3>
-      <img src={movie.Poster} alt={`${movie.Title} Poster`} />
+      <Image layout="fill" src={movie.Poster} alt={`${movie.Title} Poster`} />
     </div>
   );
 }
