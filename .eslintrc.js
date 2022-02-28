@@ -8,7 +8,7 @@ module.exports = {
     "airbnb",
     "plugin:prettier/recommended",
     "plugin:@next/next/recommended",
-    "plugin:@typescript-eslint/recommended"
+    "plugin:@typescript-eslint/recommended",
   ],
   parserOptions: {
     ecmaFeatures: {
