@@ -1,7 +1,7 @@
-import type { NextFetchEvent, NextRequest } from "next/server";
+import { NextFetchEvent, NextRequest, NextResponse } from "next/server";
 
 const middleware = (req: NextRequest, ev: NextFetchEvent) => {
-  return new Response("Hello, World");
+  return NextResponse.next();
 };
 
 export default middleware;

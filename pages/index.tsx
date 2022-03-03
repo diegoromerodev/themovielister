@@ -1,12 +1,13 @@
 import useSWR from "swr";
 import Image from "next/image";
-// import { GetStaticProps } from "next";
+import { GetStaticProps } from "next";
 import Link from "next/link";
 import styles from "../index.module.scss";
+import pgSequelize from "../lib/sequelize";
 
 function HomePage() {
   const movieAPI = `http://www.omdbapi.com/?apikey=${process.env.NEXT_PUBLIC_MOVIEKEY}&s=avengers`;
-  const fetcher = (...args) => fetch(...args).then((res) => res.json());
+  const fetcher = (args) => fetch(args).then((res) => res.json());
   const { data } = useSWR(movieAPI, fetcher);
   if (!data) return <h1>Fetching data...</h1>;
   const movie = data.Search[0];
@@ -32,13 +33,16 @@ function HomePage() {
   );
 }
 
-// export const getStaticProps: GetStaticProps = async () => {
-//   return {
-//     props: {
-//       movie: data.Search[0],
-//     },
-//     revalidate: 10,
-//   };
-// };
+export const getStaticProps: GetStaticProps = async () => {
+  try {
+    await pgSequelize.authenticate();
+    console.log("Success authenticating");
+  } catch (err) {
+    console.log("Auth failed", err);
+  }
+  return {
+    props: {},
+  };
+};
 
 export default HomePage;
