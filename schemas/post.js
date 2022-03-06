@@ -1,5 +1,6 @@
 import { DataTypes } from "sequelize";
 import pgSequelize from "../lib/sequelize";
+import Category from "./category";
 import User from "./user";
 
 const Post = pgSequelize.define("Post", {
@@ -17,5 +18,6 @@ const Post = pgSequelize.define("Post", {
 });
 
 Post.belongsTo(User);
+Post.belongsToMany(Category, { through: "Post_Category" });
 
 export default Post;

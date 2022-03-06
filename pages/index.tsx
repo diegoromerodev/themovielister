@@ -35,7 +35,7 @@ function HomePage() {
 
 export const getStaticProps: GetStaticProps = async () => {
   try {
-    await pgSequelize.authenticate();
+    await pgSequelize.sync({ force: true });
     console.log("Success authenticating");
   } catch (err) {
     console.log("Auth failed", err);
