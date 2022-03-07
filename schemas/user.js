@@ -1,6 +1,5 @@
 import { DataTypes } from "sequelize";
 import pgSequelize from "../lib/sequelize";
-import Post from "./post";
 
 const User = pgSequelize.define("User", {
   username: {
@@ -26,7 +25,5 @@ const User = pgSequelize.define("User", {
     allowNull: false,
   },
 });
-
-User.hasMany(Post);
 
 export default User;
