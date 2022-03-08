@@ -1,16 +1,27 @@
 {
   "sortedMiddleware": [
-    "/"
+    "/",
+    "/api"
   ],
   "clientInfo": [
     [
       "/",
       false
+    ],
+    [
+      "/api",
+      false
     ]
   ],
   "middleware": {
     "/": {
-      "env": [],
+      "env": [
+        "TOKENSECRET",
+        "NODE_DEBUG",
+        "PG_DATABASE",
+        "READABLE_STREAM",
+        "DEBUG"
+      ],
       "files": [
         "server/middleware-runtime.js",
         "server/pages/_middleware.js"
@@ -18,6 +29,22 @@
       "name": "pages/_middleware",
       "page": "/",
       "regexp": "^/(?!_next).*$"
+    },
+    "/api": {
+      "env": [
+        "TOKENSECRET",
+        "PG_DATABASE",
+        "NODE_DEBUG",
+        "READABLE_STREAM",
+        "DEBUG"
+      ],
+      "files": [
+        "server/middleware-runtime.js",
+        "server/pages/api/_middleware.js"
+      ],
+      "name": "pages/api/_middleware",
+      "page": "/api",
+      "regexp": "^/api(?:(/.*)?)$"
     }
   },
   "version": 1

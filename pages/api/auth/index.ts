@@ -8,7 +8,6 @@ passport.use(localPassport);
 const authHandler = nextConnect().post(
   (req: NextApiRequest, res: NextApiResponse) => {
     passport.authenticate("local", (error, data) => {
-      console.log(error);
       if (error) return res.status(403).json({ error });
       return res.json(data);
     })(req, res);

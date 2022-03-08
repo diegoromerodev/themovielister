@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { Model } from "sequelize";
+import tokenMiddleware from "../../../lib/tokenMiddleware";
 import Post from "../../../schemas/post";
 import User from "../../../schemas/user";
 
@@ -19,6 +20,13 @@ const newPost = async ({ title, body, movie, userId }) => {
 };
 
 const postsHandler = async (req: NextApiRequest, res: NextApiResponse) => {
+  let user;
+  try {
+    user = await tokenMiddleware(req);
+  } catch (err) {
+    user = false;
+  }
+  return res.json(user);
   let postData;
   try {
     switch (req.method) {
