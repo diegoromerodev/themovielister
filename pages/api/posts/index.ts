@@ -2,19 +2,19 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { Model } from "sequelize";
 import tokenMiddleware from "../../../lib/tokenMiddleware";
 import Post from "../../../schemas/post";
-import User from "../../../schemas/user";
 
 interface PostSchema extends Model {
   setUser?: (user: Model) => void;
 }
 
-const newPost = async ({ title, body, movie, userId }) => {
+const newPost = async ({ title, body, movie }, user) => {
+  if (!user) return false;
   const post: PostSchema = await Post.create({
     title,
     body,
     movie,
+    UserId: user.id,
   });
-  const user = await User.findByPk(userId);
   post.setUser(user);
   return post;
 };
@@ -26,19 +26,19 @@ const postsHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   } catch (err) {
     user = false;
   }
-  return res.json(user);
   let postData;
   try {
     switch (req.method) {
       case "POST":
-        postData = await newPost(req.body);
+        if (!user) return res.status(401).json("UNAUTHORIZED");
+        postData = await newPost(req.body, user);
         break;
       default:
         postData = await Post.findAll();
         break;
     }
   } catch (err) {
-    return res.status(400).send("Invalid request");
+    return res.status(400).send({ error: err });
   }
   return res.json(postData);
 };

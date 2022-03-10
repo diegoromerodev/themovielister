@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import User from "../../../schemas/user";
 
 const usersHandler = async (req: NextApiRequest, res: NextApiResponse) => {
+  if (req.method !== "POST") return res.status(400).json("NO SUCH ENDPOINT");
   const { username, email, firstName, lastName, password } = req.body;
   try {
     const hashedPass = await bcrypt.hash(password, 5);
