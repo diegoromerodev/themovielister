@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import useSWR from "swr";
 import Image from "next/image";
 import { GetStaticProps } from "next";
