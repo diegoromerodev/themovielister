@@ -1,11 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { Model } from "sequelize";
 import tokenMiddleware from "../../../lib/tokenMiddleware";
+import { PostSchema } from "../../../lib/types";
 import Post from "../../../schemas/post";
-
-interface PostSchema extends Model {
-  setUser?: (user: Model) => void;
-}
 
 const newPost = async ({ title, body, movie }, user) => {
   if (!user) return false;

@@ -7,7 +7,9 @@ const Comment = pgSequelize.define("Comment", {
   body: DataTypes.STRING,
 });
 
-Comment.belongsTo(Post);
+Comment.belongsTo(Post, {
+  onDelete: "CASCADE",
+});
 Comment.belongsTo(User);
 
 export default Comment;
