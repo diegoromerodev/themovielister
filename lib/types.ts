@@ -2,6 +2,11 @@ import { Model } from "sequelize/types";
 
 export interface UserSchema extends Model {
   id?: number;
+  username?: string;
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  password?: string;
 }
 
 export interface PostSchema extends Model {
