@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import tokenMiddleware from "../../../../lib/tokenMiddleware";
-import Comment from "../../../../schemas/comment";
-import Post from "../../../../schemas/post";
-import User from "../../../../schemas/user";
+import tokenMiddleware from "../../../../../lib/tokenMiddleware";
+import Comment from "../../../../../schemas/comment";
+import Post from "../../../../../schemas/post";
+import User from "../../../../../schemas/user";
 
 const getPostComments = async (postId: number) => {
   const comments = Comment.findAll({
