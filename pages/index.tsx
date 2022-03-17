@@ -5,6 +5,7 @@ import { GetStaticProps } from "next";
 import Link from "next/link";
 import styles from "../index.module.scss";
 import pgSequelize from "../lib/sequelize";
+import NavBar from "../components/NavBar";
 
 function HomePage() {
   const movieAPI = `http://www.omdbapi.com/?apikey=${process.env.NEXT_PUBLIC_MOVIEKEY}&s=avengers`;
