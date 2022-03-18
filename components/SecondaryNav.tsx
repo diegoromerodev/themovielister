@@ -4,31 +4,44 @@ import ColorPalette from "../styles/ColorPalette";
 
 const LighterNavContainer = styled.div`
   background-color: ${ColorPalette.gray};
-  gap: 1rem;
+  gap: 2rem;
   justify-content: center;
   display: flex;
   padding: 0.5rem;
-`;
-
-const MenuItem = styled(Link)`
-  & > * {
+  a {
     color: ${ColorPalette.light};
     text-decoration: none;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 0.5rem;
+    transition: all 0.2s ease-out;
+    width: 15%;
+    text-align: center;
+    &:hover {
+      font-weight: 800;
+    }
+  }
+  p {
+    color: ${ColorPalette.light};
+    font-weight: 100;
+    opacity: 0.4;
   }
 `;
 
 function SecondaryNav() {
   return (
     <LighterNavContainer>
-      <MenuItem href="/about" passHref>
+      <Link href="/trending" passHref>
+        Trending
+      </Link>
+      <p>|</p>
+      <Link href="/lounge" passHref>
+        Lounge
+      </Link>
+      <p>|</p>
+      <Link href="/about" passHref>
         About
-      </MenuItem>
-      <MenuItem href="/about" passHref>
-        About
-      </MenuItem>
-      <MenuItem href="/about" passHref>
-        About
-      </MenuItem>
+      </Link>
     </LighterNavContainer>
   );
 }
