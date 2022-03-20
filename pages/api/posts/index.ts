@@ -1,10 +1,12 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import tokenMiddleware from "../../../lib/tokenMiddleware";
 import { PostSchema } from "../../../lib/types";
+import Category from "../../../schemas/category";
 import Post from "../../../schemas/post";
 
 const newPost = async ({ title, body, movie }, user) => {
   if (!user) return false;
+  const category = 1;
   const post: PostSchema = await Post.create({
     title,
     body,
@@ -12,6 +14,8 @@ const newPost = async ({ title, body, movie }, user) => {
     UserId: user.id,
   });
   post.setUser(user);
+  const categoryModel = Category.findByPk(category);
+  post.addCategory(categoryModel, { through: { selfGranted: false } });
   return post;
 };
 
