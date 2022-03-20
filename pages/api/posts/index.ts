@@ -13,9 +13,9 @@ const newPost = async ({ title, body, movie }, user) => {
     movie,
     UserId: user.id,
   });
-  post.setUser(user);
-  const categoryModel = Category.findByPk(category);
-  post.addCategory(categoryModel, { through: { selfGranted: false } });
+  await post.setUser(user);
+  const categoryModel = await Category.findByPk(category);
+  await post.setCategory(categoryModel);
   return post;
 };
 

@@ -15,6 +15,7 @@ const categoriesHandler = async (req: NextApiRequest, res: NextApiResponse) => {
         catData = await Category.findAll({ include: Post });
     }
   } catch (err) {
+    console.log(err);
     return res.status(400).send("Invalid request");
   }
   return res.json(catData);

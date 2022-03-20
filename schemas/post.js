@@ -18,6 +18,6 @@ const Post = pgSequelize.define("Post", {
 });
 
 Post.belongsTo(User);
-Post.belongsToMany(Category, { through: "Post_Category" });
+Post.belongsTo(Category);
 
 export default Post;
