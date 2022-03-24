@@ -1,4 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
+import tokenMiddleware from "../../../lib/tokenMiddleware";
 import Category from "../../../schemas/category";
 import seedCategoryData from "../../../schemas/data/categories";
 import seedPostData from "../../../schemas/data/posts";
@@ -27,8 +28,16 @@ const executeSeed = async () => {
 };
 
 const seedHandler = async (req: NextApiRequest, res: NextApiResponse) => {
+  let user;
+  try {
+    user = await tokenMiddleware(req);
+  } catch (err) {
+    user = false;
+  }
   switch (req.method) {
     case "POST":
+      if (user.role !== "admin")
+        return res.status(403).json("NOT ENOUGH PRIVILEGES");
       await executeSeed();
       break;
     default:

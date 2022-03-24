@@ -7,6 +7,7 @@ export interface UserSchema extends Model {
   lastName?: string;
   email?: string;
   password?: string;
+  role?: string;
 }
 
 export interface PostSchema extends Model {

@@ -4,18 +4,12 @@ interface UserData {
   email: string;
   username: string;
   password: string;
+  role?: string;
 }
 
 type UserDataArray = UserData[];
 
 const seedUsersArray: UserDataArray = [
-  {
-    firstName: "Diego",
-    lastName: "Romero",
-    email: "diegoromeroxd@email.com",
-    username: "dieg0r0m3r0",
-    password: "5278182@@@@",
-  },
   {
     firstName: "Arturo",
     lastName: "Romero",

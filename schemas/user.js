@@ -24,6 +24,11 @@ const User = pgSequelize.define("User", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  role: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    defaultValue: "member",
+  },
 });
 
 export default User;
