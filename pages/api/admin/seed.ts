@@ -1,4 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
+import bcrypt from "bcryptjs";
 import tokenMiddleware from "../../../lib/tokenMiddleware";
 import Category from "../../../schemas/category";
 import seedCategoryData from "../../../schemas/data/categories";
@@ -15,7 +16,8 @@ const executeSeed = async () => {
     categories.push(category);
   });
   seedUsersArray.forEach(async (user) => {
-    const userInstance = await User.create({ ...user });
+    const password = await bcrypt.hash(user.password, 5);
+    const userInstance = await User.create({ ...user, password });
     users.push(userInstance);
   });
   seedPostData.forEach(async (post) => {

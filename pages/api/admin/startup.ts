@@ -1,4 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
+import bcrypt from "bcryptjs";
 import pgSequelize from "../../../lib/sequelize";
 import User from "../../../schemas/user";
 import Post from "../../../schemas/post";
@@ -22,7 +23,7 @@ const startupHandler = async (req: NextApiRequest, res: NextApiResponse) => {
       lastName: "Romero",
       email: "diegoromeroxd@email.com",
       username: "dieg0r0m3r0",
-      password: "5278182@@@@",
+      password: await bcrypt.hash("5278182@@@@", 5),
       role: "admin",
     });
     return res.status(200).send("SUCCESS");
