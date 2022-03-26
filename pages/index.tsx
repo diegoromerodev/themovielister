@@ -2,12 +2,12 @@
 import useSWR from "swr";
 import Image from "next/image";
 import { GetStaticProps } from "next";
+import axios from "axios";
+import PropTypes from "prop-types";
 import pgSequelize from "../lib/sequelize";
 import { SectionContainer, SectionHeader } from "../components/tabloids";
-import Post from "../schemas/post";
-import Category from "../schemas/category";
 
-function HomePage() {
+function HomePage({ categories }) {
   const movieAPI = `http://www.omdbapi.com/?apikey=${process.env.NEXT_PUBLIC_MOVIEKEY}&s=avengers`;
   const fetcher = (args) => fetch(args).then((res) => res.json());
   const { data } = useSWR(movieAPI, fetcher);
@@ -15,9 +15,13 @@ function HomePage() {
   const movie = data.Search[0];
   return (
     <>
-      <SectionContainer>
-        <SectionHeader>General Discussion</SectionHeader>
-      </SectionContainer>
+      {categories?.map((cat) => {
+        return (
+          <SectionContainer key={`category-header-${cat.id}`}>
+            <SectionHeader>{cat.name}</SectionHeader>
+          </SectionContainer>
+        );
+      })}
       <div>
         <h3>{movie.Title}</h3>
         <Image
@@ -33,15 +37,27 @@ function HomePage() {
 }
 
 export const getStaticProps: GetStaticProps = async () => {
+  let categories;
   try {
     await pgSequelize.sync({ force: true });
-    console.log("Success authenticating");
+    const catRes = await axios.get(`${process.env.API_URL}/api/categories`);
+    categories = catRes.data;
   } catch (err) {
-    console.log("Auth failed", err);
+    throw new Error(err);
   }
   return {
-    props: {},
+    props: {
+      categories,
+    },
   };
+};
+
+HomePage.propTypes = {
+  categories: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+    })
+  ).isRequired,
 };
 
 export default HomePage;
