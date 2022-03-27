@@ -4,10 +4,16 @@ import Image from "next/image";
 import { GetStaticProps } from "next";
 import axios from "axios";
 import PropTypes from "prop-types";
+import Link from "next/link";
 import pgSequelize from "../lib/sequelize";
-import { SectionContainer, SectionHeader } from "../components/tabloids";
+import {
+  PostItem,
+  SectionContainer,
+  SectionHeader,
+} from "../components/tabloids";
+import { CategorySchema } from "../lib/types";
 
-function HomePage({ categories }) {
+function HomePage({ categories }: { categories: CategorySchema[] }) {
   const movieAPI = `http://www.omdbapi.com/?apikey=${process.env.NEXT_PUBLIC_MOVIEKEY}&s=avengers`;
   const fetcher = (args) => fetch(args).then((res) => res.json());
   const { data } = useSWR(movieAPI, fetcher);
@@ -16,9 +22,18 @@ function HomePage({ categories }) {
   return (
     <>
       {categories?.map((cat) => {
+        console.log(cat.Posts);
         return (
           <SectionContainer key={`category-header-${cat.id}`}>
             <SectionHeader>{cat.name}</SectionHeader>
+            {cat.Posts?.map((post) => (
+              <Link href={`/posts/${post.id}`} passHref>
+                <PostItem>
+                  <p>{post.title}</p>
+                  <p>{post.title}</p>
+                </PostItem>
+              </Link>
+            ))}
           </SectionContainer>
         );
       })}
@@ -37,7 +52,7 @@ function HomePage({ categories }) {
 }
 
 export const getStaticProps: GetStaticProps = async () => {
-  let categories;
+  let categories: CategorySchema;
   try {
     await pgSequelize.sync({ force: true });
     const catRes = await axios.get(`${process.env.API_URL}/api/categories`);

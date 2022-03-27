@@ -18,6 +18,12 @@ export interface PostSchema extends Model {
   UserId?: number | null;
 }
 
+export interface CategorySchema extends Model {
+  id?: number;
+  name?: string;
+  Posts?: PostSchema[];
+}
+
 export interface CommentSchema extends Model {
   id?: number;
   body?: string;
