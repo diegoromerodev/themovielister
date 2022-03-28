@@ -1,9 +1,12 @@
+import Link from "next/link";
 import styled from "styled-components";
 import ColorPalette from "../styles/ColorPalette";
 
 const NavContainer = styled.nav`
   background-color: ${ColorPalette.dark};
   padding: 1.1rem;
+  display: flex;
+  justify-content: center;
 `;
 
 const NavLogo = styled.h3`
@@ -14,12 +17,15 @@ const NavLogo = styled.h3`
   letter-spacing: 1.2rem;
   text-align: center;
   font-weight: 900;
+  cursor: pointer;
 `;
 
 function NavBar() {
   return (
     <NavContainer>
-      <NavLogo>MOVIELISTER</NavLogo>
+      <Link href="/" passHref>
+        <NavLogo>MOVIELISTER</NavLogo>
+      </Link>
     </NavContainer>
   );
 }
