@@ -5,6 +5,7 @@ import User from "../../../schemas/user";
 import Post from "../../../schemas/post";
 import Category from "../../../schemas/category";
 import Comment from "../../../schemas/comment";
+import Movie from "../../../schemas/movie";
 
 const startupHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== "POST") return res.status(400).json("NO SUCH ENDPOINT");
@@ -14,6 +15,7 @@ const startupHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
   try {
     await pgSequelize.authenticate();
+    await Movie.sync({ force: true });
     await User.sync({ force: true });
     await Post.sync({ force: true });
     await Category.sync({ force: true });

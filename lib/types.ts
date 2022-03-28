@@ -1,5 +1,11 @@
 import { Model } from "sequelize/types";
 
+export interface MovieSchema extends Model {
+  imageURL?: string;
+  title?: string;
+  year: number;
+}
+
 export interface UserSchema extends Model {
   id?: number;
   username?: string;
@@ -16,6 +22,8 @@ export interface PostSchema extends Model {
   body?: string;
   setUser?: (user: Model) => void;
   UserId?: number | null;
+  createdAt?: string;
+  Movie: MovieSchema;
 }
 
 export interface CategorySchema extends Model {

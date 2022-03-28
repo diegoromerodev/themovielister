@@ -8,8 +8,14 @@ const options: StrategyOptions = {
 
 const jwtPassport = new Strategy(options, async (payload, done) => {
   try {
-    const user = await User.findByPk(payload.user.id);
-    if (user) return done(null, payload.user);
+    const user = await User.findOne({
+      where: {
+        id: payload.user.id,
+        email: payload.user.email,
+        createdAt: payload.user.createdAt,
+      },
+    });
+    if (user) return done(null, user);
     return done(null, false);
   } catch (err) {
     return done(new Error("Invalid data"));

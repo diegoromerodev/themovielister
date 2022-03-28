@@ -1,15 +1,18 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+import Movie from "../../../schemas/movie";
 
-interface MoviesResponse {
-  movie: string[] | string;
-}
-
-const movieHandler = (
-  req: NextApiRequest,
-  res: NextApiResponse<MoviesResponse>
-) => {
+const movieHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { movieId } = req.query;
-  res.status(200).json({ movie: movieId });
+  let movieData;
+  switch (req.method) {
+    case "GET":
+      movieData = await Movie.findByPk(movieId.toString());
+      break;
+    default:
+      return res.status(400).json("NO SUCH ENDPOINT");
+  }
+  if (!movieData) return res.status(404).json("NO MOVIE FOUND");
+  return res.status(200).json(movieData);
 };
 
 export default movieHandler;

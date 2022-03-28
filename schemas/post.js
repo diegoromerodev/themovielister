@@ -1,6 +1,7 @@
 import { DataTypes } from "sequelize";
 import pgSequelize from "../lib/sequelize";
 import Category from "./category";
+import Movie from "./movie";
 import User from "./user";
 
 const Post = pgSequelize.define("Post", {
@@ -12,13 +13,13 @@ const Post = pgSequelize.define("Post", {
     type: DataTypes.TEXT,
     allowNull: false,
   },
-  movie: {
-    type: DataTypes.INTEGER,
-  },
 });
 
 Post.belongsTo(User);
 Post.belongsTo(Category);
 Category.hasMany(Post);
+Post.belongsTo(Movie, {
+  foreignKey: "MovieId",
+});
 
 export default Post;

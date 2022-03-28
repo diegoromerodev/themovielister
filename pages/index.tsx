@@ -7,6 +7,8 @@ import PropTypes from "prop-types";
 import Link from "next/link";
 import pgSequelize from "../lib/sequelize";
 import {
+  MovieThumb,
+  PostInfo,
   PostItem,
   SectionContainer,
   SectionHeader,
@@ -14,11 +16,6 @@ import {
 import { CategorySchema } from "../lib/types";
 
 function HomePage({ categories }: { categories: CategorySchema[] }) {
-  const movieAPI = `http://www.omdbapi.com/?apikey=${process.env.NEXT_PUBLIC_MOVIEKEY}&s=avengers`;
-  const fetcher = (args) => fetch(args).then((res) => res.json());
-  const { data } = useSWR(movieAPI, fetcher);
-  if (!data) return <h1>Fetching data...</h1>;
-  const movie = data.Search[0];
   return (
     <>
       {categories?.map((cat) => {
@@ -29,24 +26,31 @@ function HomePage({ categories }: { categories: CategorySchema[] }) {
             {cat.Posts?.map((post) => (
               <Link href={`/posts/${post.id}`} passHref>
                 <PostItem>
-                  <p>{post.title}</p>
-                  <p>{post.title}</p>
+                  <MovieThumb>
+                    <div>
+                      <Image
+                        layout="fill"
+                        objectFit="cover"
+                        width="500px"
+                        src={post.Movie.imageURL}
+                        alt={`${post.Movie.title} poster`}
+                      />
+                      <h4>
+                        {post.Movie.title} ({post.Movie.year})
+                      </h4>
+                    </div>
+                  </MovieThumb>
+                  <PostInfo>
+                    <p>{post.title}</p>
+                    <small>{post.createdAt}</small>
+                  </PostInfo>
                 </PostItem>
               </Link>
             ))}
           </SectionContainer>
         );
       })}
-      <div>
-        <h3>{movie.Title}</h3>
-        <Image
-          layout="intrinsic"
-          width={400}
-          height="600"
-          src={movie.Poster}
-          alt={`${movie.Title} Poster`}
-        />
-      </div>
+      <div />
     </>
   );
 }
