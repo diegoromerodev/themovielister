@@ -24,6 +24,7 @@ export interface PostSchema extends Model {
   UserId?: number | null;
   createdAt?: string;
   Movie?: MovieSchema;
+  User?: UserSchema;
 }
 
 export interface CategorySchema extends Model {

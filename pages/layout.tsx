@@ -5,6 +5,10 @@ import SecondaryNav from "../components/SecondaryNav";
 import ColorPalette from "../styles/ColorPalette";
 
 const GlobalStyles = createGlobalStyle`
+    a {
+        text-decoration: none;
+        color: ${ColorPalette.light};
+    }
     body {
         font-family: "Inter";
         color: ${ColorPalette.light};

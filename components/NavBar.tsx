@@ -9,22 +9,29 @@ const NavContainer = styled.nav`
   justify-content: center;
 `;
 
-const NavLogo = styled.h3`
-  font-family: sans-serif;
-  color: ${ColorPalette.light};
-  font-family: "Inter";
-  font-size: 1.2rem;
-  letter-spacing: 1.2rem;
-  text-align: center;
-  font-weight: 900;
+const NavLogo = styled.div`
+  padding: 1rem 2rem;
   cursor: pointer;
+  background-color: blue;
+  h3 {
+    color: gold;
+    font-family: "Inter", sans-serif;
+    font-size: 1.2rem;
+    text-align: center;
+    font-weight: 900;
+    text-shadow: 3px 3px ${ColorPalette.darker};
+    letter-spacing: 1rem;
+    margin-right: -1rem;
+  }
 `;
 
 function NavBar() {
   return (
     <NavContainer>
       <Link href="/" passHref>
-        <NavLogo>MOVIELISTER</NavLogo>
+        <NavLogo>
+          <h3>MOVIELISTER</h3>
+        </NavLogo>
       </Link>
     </NavContainer>
   );

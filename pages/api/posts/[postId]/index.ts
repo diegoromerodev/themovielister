@@ -2,7 +2,9 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { Model } from "sequelize/types";
 import tokenMiddleware from "../../../../lib/tokenMiddleware";
 import { PostSchema, UserSchema } from "../../../../lib/types";
+import Movie from "../../../../schemas/movie";
 import Post from "../../../../schemas/post";
+import User from "../../../../schemas/user";
 
 type PostId = string | number | undefined;
 
@@ -12,7 +14,7 @@ interface IdBody {
 
 const getPost = async (postId: number): Promise<Model | null> => {
   try {
-    const post = await Post.findByPk(postId);
+    const post = await Post.findByPk(postId, { include: [User, Movie] });
     return post;
   } catch (err) {
     return null;
