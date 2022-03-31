@@ -2,7 +2,7 @@ module.exports = {
   images: {
     domains: ["m.media-amazon.com"],
   },
-  experimental: {
+  compiler: {
     styledComponents: true,
   },
 };

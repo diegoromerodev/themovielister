@@ -1,5 +1,4 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import useSWR from "swr";
 import Image from "next/image";
 import { GetStaticProps } from "next";
 import axios from "axios";
@@ -19,19 +18,21 @@ function HomePage({ categories }: { categories: CategorySchema[] }) {
   return (
     <>
       {categories?.map((cat) => {
-        console.log(cat.Posts);
         return (
           <SectionContainer key={`category-header-${cat.id}`}>
             <SectionHeader>{cat.name}</SectionHeader>
             {cat.Posts?.map((post) => (
-              <Link href={`/posts/${post.id}`} passHref>
+              <Link
+                key={`post-index-${post.id}`}
+                href={`/posts/${post.id}`}
+                passHref
+              >
                 <PostItem>
                   <MovieThumb>
                     <div>
                       <Image
                         layout="fill"
                         objectFit="cover"
-                        width="500px"
                         src={post.Movie.imageURL}
                         alt={`${post.Movie.title} poster`}
                       />
@@ -42,7 +43,9 @@ function HomePage({ categories }: { categories: CategorySchema[] }) {
                   </MovieThumb>
                   <PostInfo>
                     <p>{post.title}</p>
-                    <small>{post.createdAt}</small>
+                    <small>
+                      Created on {new Date(post.createdAt).toUTCString()}
+                    </small>
                   </PostInfo>
                 </PostItem>
               </Link>
@@ -68,6 +71,7 @@ export const getStaticProps: GetStaticProps = async () => {
     props: {
       categories,
     },
+    revalidate: 10,
   };
 };
 

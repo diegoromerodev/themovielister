@@ -18,7 +18,7 @@ export const SectionHeader = styled.h2`
   text-transform: uppercase;
 `;
 
-export const PostItem = styled.div`
+export const PostItem = styled.a`
   grid-column: 1 / span 3;
   background: linear-gradient(0deg, #111, #000);
   padding: 0.5rem;
@@ -43,11 +43,18 @@ export const PostInfo = styled.div`
   flex-direction: column;
   gap: 0.5rem;
   flex: 1;
+  p {
+    font-weight: 700;
+  }
+  small {
+    font-weight: 200;
+  }
 `;
 
 export const MovieThumb = styled.div`
   width: 25%;
   overflow: hidden;
+  border: 1px solid ${ColorPalette.gray};
   div {
     position: relative;
     height: 100%;

@@ -23,7 +23,7 @@ export interface PostSchema extends Model {
   setUser?: (user: Model) => void;
   UserId?: number | null;
   createdAt?: string;
-  Movie: MovieSchema;
+  Movie?: MovieSchema;
 }
 
 export interface CategorySchema extends Model {
