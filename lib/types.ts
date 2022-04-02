@@ -1,9 +1,10 @@
+/* eslint-disable no-use-before-define */
 import { Model } from "sequelize/types";
 
 export interface MovieSchema extends Model {
   imageURL?: string;
   title?: string;
-  year: number;
+  year?: number;
 }
 
 export interface UserSchema extends Model {
@@ -16,21 +17,23 @@ export interface UserSchema extends Model {
   role?: string;
 }
 
-export interface PostSchema extends Model {
-  id?: number;
-  title?: string;
-  body?: string;
-  setUser?: (user: Model) => void;
-  UserId?: number | null;
-  createdAt?: string;
-  Movie?: MovieSchema;
-  User?: UserSchema;
-}
-
 export interface CategorySchema extends Model {
   id?: number;
   name?: string;
   Posts?: PostSchema[];
+}
+
+export interface PostSchema extends Model {
+  id?: number;
+  title?: string;
+  body?: string;
+  setUser?: (user: UserSchema) => Promise<void>;
+  setMovie?: (movie: MovieSchema) => Promise<void>;
+  setCategory?: (category: CategorySchema) => Promise<void>;
+  UserId?: number | null;
+  createdAt?: string;
+  Movie?: MovieSchema;
+  User?: UserSchema;
 }
 
 export interface CommentSchema extends Model {

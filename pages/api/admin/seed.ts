@@ -8,6 +8,8 @@ import seedPostData from "../../../schemas/data/posts";
 import seedUsersArray from "../../../schemas/data/users";
 import Post from "../../../schemas/post";
 import User from "../../../schemas/user";
+import { addMovie } from "../movies";
+import { PostSchema } from "../../../lib/types";
 
 const populateUsers = async (usersArr: Model[]) => {
   return new Promise((resolve, reject) => {
@@ -46,12 +48,16 @@ const executeSeed = async () => {
   await populateCategories(categories);
   await populateUsers(users);
   seedPostData.forEach(async (post) => {
-    const postData = await Post.create({ ...post });
+    const postData: PostSchema = await Post.create({ ...post });
     const user = users[Math.floor(Math.random() * users.length)];
+    const movie = await addMovie(post.movie);
     await postData.setUser(user);
     await postData.setCategory(
       categories[Math.floor(Math.random() * categories.length)]
     );
+    if (movie) {
+      await postData.setMovie(movie);
+    }
   });
 };
 

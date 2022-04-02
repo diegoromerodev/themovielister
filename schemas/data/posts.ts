@@ -1,7 +1,7 @@
 interface PostData {
   title: string;
   body: string;
-  MovieId: string;
+  movie: string;
 }
 
 type PostDataArray = PostData[];
@@ -10,32 +10,32 @@ const seedPostData: PostDataArray = [
   {
     title: "Batman is good",
     body: "I recommend this movie",
-    MovieId: "54",
+    movie: "tt2953050",
   },
   {
     title: "Superman is nice",
     body: "Good movie",
-    MovieId: "432",
+    movie: "tt10872600",
   },
   {
     title: "Cult movie",
     body: "find movie nice",
-    MovieId: "22",
+    movie: "tt1877830",
   },
   {
     title: "The notebook is movie",
     body: "bad movie",
-    MovieId: "31",
+    movie: "tt11286314",
   },
   {
     title: "Test movue",
     body: "I recommend this movie",
-    MovieId: "77",
+    movie: "tt7286456",
   },
   {
     title: "Inception moves",
     body: "Nice movieeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
-    MovieId: "21",
+    movie: "tt0468569",
   },
 ];
 
