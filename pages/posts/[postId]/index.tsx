@@ -1,8 +1,11 @@
 import axios from "axios";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import Image from "next/image";
+import Link from "next/link";
 import PropTypes from "prop-types";
 import styled from "styled-components";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFilm, faUser } from "@fortawesome/free-solid-svg-icons";
 import { SectionContainer } from "../../../components/tabloids";
 import { PostSchema } from "../../../lib/types";
 import ColorPalette from "../../../styles/ColorPalette";
@@ -55,6 +58,12 @@ const ArtPostTitle = styled.div`
     font-weight: 400;
     letter-spacing: -0.1rem;
     text-shadow: 0 0 4rem ${ColorPalette.light};
+    text-align: center;
+  }
+  .post-info-link {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
   }
 `;
 
@@ -64,6 +73,19 @@ function MovieDetails({ postData }: { postData: PostSchema }) {
       <PostDetailsContainer>
         <ArtPostTitle>
           <h1>{postData.title}</h1>
+          <div className="post-info-link">
+            <Link href={`/users/${postData.User.id}`} passHref>
+              <a>
+                <FontAwesomeIcon icon={faUser} /> {postData.User.username}
+              </a>
+            </Link>
+            •
+            <Link href={`/movies/${postData.Movie.imdbId}`} passHref>
+              <a>
+                <FontAwesomeIcon icon={faFilm} /> {postData.Movie.title}
+              </a>
+            </Link>
+          </div>
         </ArtPostTitle>
         <UserDetailsContainer role={postData.User.role}>
           <div className="user-avatar">
@@ -105,10 +127,15 @@ MovieDetails.propTypes = {
     title: PropTypes.string,
     body: PropTypes.string,
     User: PropTypes.shape({
+      id: PropTypes.number,
       username: PropTypes.string,
       role: PropTypes.string,
     }),
-    Movie: PropTypes.shape({ imageURL: PropTypes.string }),
+    Movie: PropTypes.shape({
+      imdbId: PropTypes.string,
+      imageURL: PropTypes.string,
+      title: PropTypes.string,
+    }),
   }).isRequired,
 };
 

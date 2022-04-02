@@ -2,6 +2,7 @@
 import { Model } from "sequelize/types";
 
 export interface MovieSchema extends Model {
+  imdbId?: string;
   imageURL?: string;
   title?: string;
   year?: number;
