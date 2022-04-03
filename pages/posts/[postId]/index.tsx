@@ -6,7 +6,7 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFilm, faUser } from "@fortawesome/free-solid-svg-icons";
-import { SectionContainer } from "../../../components/tabloids";
+import { HoverLink, SectionContainer } from "../../../components/tabloids";
 import { PostSchema } from "../../../lib/types";
 import ColorPalette from "../../../styles/ColorPalette";
 
@@ -75,22 +75,22 @@ function MovieDetails({ postData }: { postData: PostSchema }) {
           <h1>{postData.title}</h1>
           <div className="post-info-link">
             <Link href={`/users/${postData.User.id}`} passHref>
-              <a>
+              <HoverLink>
                 <FontAwesomeIcon icon={faUser} /> {postData.User.username}
-              </a>
+              </HoverLink>
             </Link>
             •
             <Link href={`/movies/${postData.Movie.imdbId}`} passHref>
-              <a>
+              <HoverLink>
                 <FontAwesomeIcon icon={faFilm} /> {postData.Movie.title}
-              </a>
+              </HoverLink>
             </Link>
           </div>
         </ArtPostTitle>
         <UserDetailsContainer role={postData.User.role}>
           <div className="user-avatar">
             <Image
-              src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Jeff_Sessions_with_Elmo_and_Rosita_%28cropped%29.jpg/220px-Jeff_Sessions_with_Elmo_and_Rosita_%28cropped%29.jpg"
+              src={postData.User.avatarURL}
               layout="fill"
               objectFit="cover"
             />
@@ -130,6 +130,7 @@ MovieDetails.propTypes = {
       id: PropTypes.number,
       username: PropTypes.string,
       role: PropTypes.string,
+      avatarURL: PropTypes.string,
     }),
     Movie: PropTypes.shape({
       imdbId: PropTypes.string,

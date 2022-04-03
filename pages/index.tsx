@@ -6,11 +6,14 @@ import PropTypes from "prop-types";
 import Link from "next/link";
 import pgSequelize from "../lib/sequelize";
 import {
+  BoldTextShadow,
+  HoverLink,
   MovieThumb,
   PostInfo,
   PostItem,
   SectionContainer,
   SectionHeader,
+  UserThumb,
 } from "../components/tabloids";
 import { CategorySchema } from "../lib/types";
 
@@ -22,12 +25,8 @@ function HomePage({ categories }: { categories: CategorySchema[] }) {
           <SectionContainer key={`category-header-${cat.id}`}>
             <SectionHeader>{cat.name}</SectionHeader>
             {cat.Posts?.map((post) => (
-              <Link
-                key={`post-index-${post.id}`}
-                href={`/posts/${post.id}`}
-                passHref
-              >
-                <PostItem>
+              <PostItem key={`index-post-${post.id}`}>
+                <Link href={`/movies/${post.Movie.imdbId}`} passHref>
                   <MovieThumb>
                     <div>
                       <Image
@@ -36,19 +35,40 @@ function HomePage({ categories }: { categories: CategorySchema[] }) {
                         src={post.Movie.imageURL}
                         alt={`${post.Movie.title} poster`}
                       />
-                      <h4>
+                      <BoldTextShadow>
                         {post.Movie.title} ({post.Movie.year})
-                      </h4>
+                      </BoldTextShadow>
                     </div>
                   </MovieThumb>
-                  <PostInfo>
-                    <p>{post.title}</p>
-                    <small>
-                      Created on {new Date(post.createdAt).toUTCString()}
-                    </small>
-                  </PostInfo>
-                </PostItem>
-              </Link>
+                </Link>
+                <PostInfo>
+                  <Link
+                    key={`post-index-${post.id}`}
+                    href={`/posts/${post.id}`}
+                    passHref
+                  >
+                    <HoverLink>{post.title}</HoverLink>
+                  </Link>
+                  <small>
+                    Created on {new Date(post.createdAt).toUTCString()}
+                  </small>
+                </PostInfo>
+                <UserThumb>
+                  <div className="user-thumb-info">
+                    <p>Created by:</p>
+                    <Link href={`/users/${post.User.id}`} passHref>
+                      <HoverLink>{post.User.username}</HoverLink>
+                    </Link>
+                  </div>
+                  <div className="user-thumb-img">
+                    <Image
+                      src={post.User.avatarURL}
+                      objectFit="cover"
+                      layout="fill"
+                    />
+                  </div>
+                </UserThumb>
+              </PostItem>
             ))}
           </SectionContainer>
         );

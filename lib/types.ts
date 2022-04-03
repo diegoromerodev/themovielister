@@ -11,6 +11,7 @@ export interface MovieSchema extends Model {
 export interface UserSchema extends Model {
   id?: number;
   username?: string;
+  avatarURL: string;
   firstName?: string;
   lastName?: string;
   email?: string;

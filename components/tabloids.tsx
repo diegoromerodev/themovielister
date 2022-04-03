@@ -18,11 +18,10 @@ export const SectionHeader = styled.h2`
   text-transform: uppercase;
 `;
 
-export const PostItem = styled.a`
+export const PostItem = styled.div`
   grid-column: 1 / span 3;
   background: linear-gradient(0deg, #111, #000);
   padding: 0.5rem;
-  cursor: pointer;
   display: flex;
   gap: 1rem;
   border-top: 1px solid ${ColorPalette.dark};
@@ -51,10 +50,11 @@ export const PostInfo = styled.div`
   }
 `;
 
-export const MovieThumb = styled.div`
+export const MovieThumb = styled.a`
   width: 25%;
   overflow: hidden;
   border: 1px solid ${ColorPalette.gray};
+  cursor: pointer;
   div {
     position: relative;
     height: 100%;
@@ -68,4 +68,41 @@ export const MovieThumb = styled.div`
       position: absolute;
     }
   }
+`;
+
+export const UserThumb = styled.div`
+  display: flex;
+  gap: 1rem;
+  .user-thumb-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+    font-size: 0.9rem;
+    font-weight: 300;
+    p {
+      font-size: 0.7rem;
+    }
+  }
+  .user-thumb-img {
+    width: 3rem;
+    overflow: hidden;
+    height: 3rem;
+    position: relative;
+    border-radius: 50%;
+    img {
+      position: absolute;
+    }
+  }
+`;
+
+export const HoverLink = styled.a`
+  &:hover {
+    color: gold;
+  }
+`;
+
+export const BoldTextShadow = styled.h4`
+  text-shadow: 1px 1px 5px ${ColorPalette.darker},
+    2px 2px 10px ${ColorPalette.darker};
 `;

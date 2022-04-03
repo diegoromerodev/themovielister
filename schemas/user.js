@@ -7,6 +7,10 @@ const User = pgSequelize.define("User", {
     unique: true,
     allowNull: false,
   },
+  avatarURL: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
   email: {
     type: DataTypes.STRING,
     unique: true,

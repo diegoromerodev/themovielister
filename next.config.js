@@ -1,6 +1,6 @@
 module.exports = {
   images: {
-    domains: ["m.media-amazon.com", "upload.wikimedia.org"],
+    domains: ["m.media-amazon.com", "i.ytimg.com"],
   },
   compiler: {
     styledComponents: true,

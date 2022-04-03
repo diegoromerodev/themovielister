@@ -25,6 +25,7 @@ const startupHandler = async (req: NextApiRequest, res: NextApiResponse) => {
       lastName: "Romero",
       email: "diegoromeroxd@email.com",
       username: "dieg0r0m3r0",
+      avatarURL: "https://i.ytimg.com/vi/EbUsZEs_1Yg/maxresdefault.jpg",
       password: await bcrypt.hash("5278182@@@@", 5),
       role: "admin",
     });
