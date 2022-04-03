@@ -2,6 +2,6 @@
   "/_app": "pages/_app.js",
   "/_document": "pages/_document.js",
   "/_error": "pages/_error.js",
-  "/api/categories": "pages/api/categories.js",
-  "/": "pages/index.js"
+  "/posts/[postId]": "pages/posts/[postId].js",
+  "/api/posts/[postId]": "pages/api/posts/[postId].js"
 }

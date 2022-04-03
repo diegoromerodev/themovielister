@@ -90,6 +90,7 @@ export const UserThumb = styled.div`
     height: 3rem;
     position: relative;
     border-radius: 50%;
+    border: 1px solid ${ColorPalette.gray};
     img {
       position: absolute;
     }

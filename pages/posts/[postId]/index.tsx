@@ -9,6 +9,7 @@ import { faFilm, faUser } from "@fortawesome/free-solid-svg-icons";
 import { HoverLink, SectionContainer } from "../../../components/tabloids";
 import { PostSchema } from "../../../lib/types";
 import ColorPalette from "../../../styles/ColorPalette";
+import pgSequelize from "../../../lib/sequelize";
 
 const PostDetailsContainer = styled.article`
   display: flex;
@@ -67,7 +68,7 @@ const ArtPostTitle = styled.div`
   }
 `;
 
-function MovieDetails({ postData }: { postData: PostSchema }) {
+function MovieDetails({ postData, postCountHash }: { postData: PostSchema }) {
   return (
     <SectionContainer>
       <PostDetailsContainer>
@@ -97,7 +98,7 @@ function MovieDetails({ postData }: { postData: PostSchema }) {
           </div>
           <div>
             <h4>{postData.User.username}</h4>
-            <p>Messages: 123</p>
+            <p>Posts: {postCountHash[postData.User.username]}</p>
           </div>
         </UserDetailsContainer>
         <MovieDetailsContainer>
@@ -114,10 +115,24 @@ export const getServerSideProps: GetServerSideProps = async (
   const postRes = await axios.get(
     `${process.env.API_URL}/api/posts/${context.query.postId}`
   );
-  const postData = postRes.data;
+  const postData: PostSchema = postRes.data;
+  const numPostQuery = await pgSequelize.query(
+    `SELECT COUNT(*), username FROM "Posts" 
+    JOIN "Users" ON "Posts"."UserId" = "Users".id
+    GROUP BY username;`
+  );
+  const numOfPostsArr = numPostQuery[0];
+  const postCountHash = numOfPostsArr.reduce(
+    (hash, row: { username: string; count: string }) => {
+      hash[row.username] = row.count;
+      return hash;
+    },
+    {}
+  );
   return {
     props: {
       postData,
+      postCountHash,
     },
   };
 };

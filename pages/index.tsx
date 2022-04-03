@@ -60,13 +60,15 @@ function HomePage({ categories }: { categories: CategorySchema[] }) {
                       <HoverLink>{post.User.username}</HoverLink>
                     </Link>
                   </div>
-                  <div className="user-thumb-img">
-                    <Image
-                      src={post.User.avatarURL}
-                      objectFit="cover"
-                      layout="fill"
-                    />
-                  </div>
+                  <Link href={`/users/${post.User.id}`} passHref>
+                    <a className="user-thumb-img">
+                      <Image
+                        src={post.User.avatarURL}
+                        objectFit="cover"
+                        layout="fill"
+                      />
+                    </a>
+                  </Link>
                 </UserThumb>
               </PostItem>
             ))}
