@@ -5,6 +5,9 @@ import SecondaryNav from "../components/SecondaryNav";
 import ColorPalette from "../styles/ColorPalette";
 
 const GlobalStyles = createGlobalStyle`
+    *, *::before, *::after {
+        box-sizing: border-box;
+    }
     a {
         text-decoration: none;
         color: ${ColorPalette.light};

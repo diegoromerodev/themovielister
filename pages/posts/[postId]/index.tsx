@@ -2,110 +2,87 @@ import axios from "axios";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import PropTypes from "prop-types";
-import styled from "styled-components";
+import PropTypes, { number } from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFilm, faUser } from "@fortawesome/free-solid-svg-icons";
 import { HoverLink, SectionContainer } from "../../../components/tabloids";
 import { PostSchema } from "../../../lib/types";
-import ColorPalette from "../../../styles/ColorPalette";
 import pgSequelize from "../../../lib/sequelize";
+import {
+  ArtPostTitle,
+  CommentCreationContainer,
+  CommentTextBox,
+  MovieDetailsContainer,
+  PostDetailsContainer,
+} from "../../../components/postDetails";
+import { calculateAge } from "../../../lib/utils";
+import {
+  UserDetailsContainer,
+  UserRole,
+} from "../../../components/userDetails";
 
-const PostDetailsContainer = styled.article`
-  display: flex;
-  flex-direction: column;
-`;
-
-const UserDetailsContainer = styled.aside`
-  border: 1px solid ${ColorPalette.gray};
-  border-bottom: none;
-  margin-top: 1rem;
-  background-color: ${ColorPalette.gray};
-  padding: 0.4rem;
-  display: flex;
-  align-items: flex-start;
-  gap: 1rem;
-  .user-avatar {
-    position: relative;
-    border: 5px solid;
-    border-image-slice: 1;
-    border-image-source: linear-gradient(to right, blue, purple);
-    width: 6rem;
-    height: 6rem;
-  }
-  h4 {
-    font-weight: 600;
-    color: ${ColorPalette.light};
-  }
-  p {
-    font-size: 0.8rem;
-  }
-`;
-
-const MovieDetailsContainer = styled.div`
-  border: 1px solid ${ColorPalette.gray};
-  padding: 1rem;
-`;
-
-const ArtPostTitle = styled.div`
-  margin-top: 1rem;
-  align-self: center;
-  border-radius: 2rem;
-  position: relative;
-  h1 {
-    color: ${ColorPalette.light};
-    text-transform: lowercase;
-    font-size: 2rem;
-    font-weight: 400;
-    letter-spacing: -0.1rem;
-    text-shadow: 0 0 4rem ${ColorPalette.light};
-    text-align: center;
-  }
-  .post-info-link {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
-`;
-
-function MovieDetails({ postData, postCountHash }: { postData: PostSchema }) {
+function MovieDetails({
+  postData,
+  postCountHash,
+}: {
+  postData: PostSchema;
+  postCountHash: { [index: string]: string };
+}) {
   return (
-    <SectionContainer>
-      <PostDetailsContainer>
-        <ArtPostTitle>
-          <h1>{postData.title}</h1>
-          <div className="post-info-link">
-            <Link href={`/users/${postData.User.id}`} passHref>
-              <HoverLink>
-                <FontAwesomeIcon icon={faUser} /> {postData.User.username}
-              </HoverLink>
-            </Link>
-            •
-            <Link href={`/movies/${postData.Movie.imdbId}`} passHref>
-              <HoverLink>
-                <FontAwesomeIcon icon={faFilm} /> {postData.Movie.title}
-              </HoverLink>
-            </Link>
+    <>
+      <SectionContainer>
+        <PostDetailsContainer>
+          <ArtPostTitle>
+            <h1>{postData.title}</h1>
+            <div className="post-info-link">
+              <Link href={`/users/${postData.User.id}`} passHref>
+                <HoverLink>
+                  <FontAwesomeIcon icon={faUser} /> {postData.User.username}
+                </HoverLink>
+              </Link>
+              •
+              <Link href={`/movies/${postData.Movie.imdbId}`} passHref>
+                <HoverLink>
+                  <FontAwesomeIcon icon={faFilm} /> {postData.Movie.title} (
+                  {postData.Movie.year})
+                </HoverLink>
+              </Link>
+            </div>
+          </ArtPostTitle>
+          <UserDetailsContainer role={postData.User.role}>
+            <div className="user-avatar">
+              <Image
+                src={postData.User.avatarURL}
+                layout="fill"
+                objectFit="cover"
+              />
+            </div>
+            <div className="user-info-post">
+              <Link href={`/users/${postData.User.id}`} passHref>
+                <HoverLink>{postData.User.username}</HoverLink>
+              </Link>
+              <UserRole>
+                <p>{postData.User.role}</p>
+              </UserRole>
+              <p>Posts: {postCountHash[postData.User.username]}</p>
+              <p>Age: {calculateAge(new Date(postData.User.createdAt))}</p>
+            </div>
+          </UserDetailsContainer>
+          <MovieDetailsContainer>
+            <p>{postData.body}</p>
+          </MovieDetailsContainer>
+        </PostDetailsContainer>
+      </SectionContainer>
+      <SectionContainer>
+        <CommentCreationContainer>
+          <CommentTextBox placeholder="Enter your response here..." />
+          <div className="under-comment-info">
+            <p>Logged in as:</p>
+            <button type="submit">Submit reply</button>
           </div>
-        </ArtPostTitle>
-        <UserDetailsContainer role={postData.User.role}>
-          <div className="user-avatar">
-            <Image
-              src={postData.User.avatarURL}
-              layout="fill"
-              objectFit="cover"
-            />
-          </div>
-          <div>
-            <h4>{postData.User.username}</h4>
-            <p>Posts: {postCountHash[postData.User.username]}</p>
-          </div>
-        </UserDetailsContainer>
-        <MovieDetailsContainer>
-          <p>{postData.body}</p>
-        </MovieDetailsContainer>
-      </PostDetailsContainer>
-    </SectionContainer>
+        </CommentCreationContainer>
+      </SectionContainer>
+    </>
   );
 }
 
@@ -123,9 +100,11 @@ export const getServerSideProps: GetServerSideProps = async (
   );
   const numOfPostsArr = numPostQuery[0];
   const postCountHash = numOfPostsArr.reduce(
-    (hash, row: { username: string; count: string }) => {
-      hash[row.username] = row.count;
-      return hash;
+    (
+      hash: Record<string, string>,
+      row: { username: string; count: string }
+    ) => {
+      return { ...hash, [row.username]: row.count };
     },
     {}
   );
@@ -146,11 +125,13 @@ MovieDetails.propTypes = {
       username: PropTypes.string,
       role: PropTypes.string,
       avatarURL: PropTypes.string,
+      createdAt: PropTypes.string,
     }),
     Movie: PropTypes.shape({
       imdbId: PropTypes.string,
       imageURL: PropTypes.string,
       title: PropTypes.string,
+      year: number,
     }),
   }).isRequired,
 };

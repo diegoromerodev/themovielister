@@ -37,6 +37,21 @@ const seedPostData: PostDataArray = [
     body: "Nice movieeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
     movie: "tt0468569",
   },
+  {
+    title: "Is this that coco movie??????",
+    body: "I hnoestly really think it is that movie",
+    movie: "tt6467266",
+  },
+  {
+    title: "Flying is really cool tho",
+    body: "We really have to fly a lot now",
+    movie: "tt10160804",
+  },
+  {
+    title: "I shat it down by me self",
+    body: "It is now shat",
+    movie: "tt1745960",
+  },
 ];
 
 export default seedPostData;
