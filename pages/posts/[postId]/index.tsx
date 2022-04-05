@@ -92,6 +92,7 @@ export const getServerSideProps: GetServerSideProps = async (
   const postRes = await axios.get(
     `${process.env.API_URL}/api/posts/${context.query.postId}`
   );
+  console.log(global.CURR_USR);
   const postData: PostSchema = postRes.data;
   const numPostQuery = await pgSequelize.query(
     `SELECT COUNT(*), username FROM "Posts" 

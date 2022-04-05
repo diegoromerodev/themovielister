@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import Image from "next/image";
-import { GetStaticProps } from "next";
+import { GetServerSideProps } from "next";
 import axios from "axios";
 import PropTypes from "prop-types";
 import Link from "next/link";
@@ -80,7 +80,7 @@ function HomePage({ categories }: { categories: CategorySchema[] }) {
   );
 }
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getServerSideProps: GetServerSideProps = async () => {
   let categories: CategorySchema;
   try {
     await pgSequelize.sync({ force: true });
@@ -93,7 +93,6 @@ export const getStaticProps: GetStaticProps = async () => {
     props: {
       categories,
     },
-    revalidate: 10,
   };
 };
 
