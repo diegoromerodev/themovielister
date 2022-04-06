@@ -84,7 +84,9 @@ export const getServerSideProps: GetServerSideProps = async () => {
   let categories: CategorySchema;
   try {
     await pgSequelize.sync({ force: true });
-    const catRes = await axios.get(`${process.env.API_URL}/api/categories`);
+    const catRes = await axios.get(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/categories`
+    );
     categories = catRes.data;
   } catch (err) {
     throw new Error(err);

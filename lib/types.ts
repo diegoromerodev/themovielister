@@ -1,4 +1,5 @@
 /* eslint-disable no-use-before-define */
+import { Dispatch, SetStateAction } from "react";
 import { Model } from "sequelize/types";
 
 export interface MovieSchema extends Model {
@@ -12,7 +13,7 @@ export interface UserSchema extends Model {
   id?: number;
   createdAt?: string;
   username?: string;
-  avatarURL: string;
+  avatarURL?: string;
   firstName?: string;
   lastName?: string;
   email?: string;
@@ -49,3 +50,10 @@ export interface CommentPostQuery {
   postId?: string | number | undefined;
   commentId?: string | number | undefined;
 }
+
+export type AppDataContext = [
+  {
+    userData: UserSchema;
+  },
+  Dispatch<SetStateAction<unknown>>
+];
