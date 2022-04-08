@@ -44,6 +44,7 @@ export interface CommentSchema extends Model {
   id?: number;
   body?: string;
   UserId?: number;
+  User?: UserSchema;
 }
 
 export interface CommentPostQuery {

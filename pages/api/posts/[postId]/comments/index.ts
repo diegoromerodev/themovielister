@@ -1,5 +1,10 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import tokenMiddleware from "../../../../../lib/tokenMiddleware";
+import {
+  CommentSchema,
+  PostSchema,
+  UserSchema,
+} from "../../../../../lib/types";
 import Comment from "../../../../../schemas/comment";
 import Post from "../../../../../schemas/post";
 import User from "../../../../../schemas/user";
@@ -14,20 +19,25 @@ const getPostComments = async (postId: number) => {
   return comments;
 };
 
-const createPostComment = async ({ body, postId, user }) => {
-  const post = await Post.findByPk(postId);
-  if (!post || !user) return false;
-  const comment = await Comment.create(
+const createPostComment = async (
+  postId: number,
+  user: UserSchema,
+  body: string
+) => {
+  const post: PostSchema = await Post.findByPk(postId);
+  if (!post || !body || !user) return false;
+  const addedComment: CommentSchema = await Comment.create({
+    body,
+    UserId: user.id,
+    PostId: post.id,
+  });
+  const populatedComment: CommentSchema = await Comment.findByPk(
+    addedComment.id,
     {
-      body,
-      PostId: postId,
-      UserId: user.id,
-    },
-    {
-      include: [Post, User],
+      include: [User, Post],
     }
   );
-  return comment;
+  return populatedComment;
 };
 
 const postCommentsHandler = async (
@@ -45,7 +55,7 @@ const postCommentsHandler = async (
   let commentData;
   switch (req.method) {
     case "POST":
-      commentData = await createPostComment({ body, user, postId });
+      commentData = await createPostComment(postId, user, body);
       break;
     default:
       commentData = await getPostComments(postId);

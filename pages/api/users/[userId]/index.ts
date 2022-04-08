@@ -4,6 +4,7 @@ import { UserSchema } from "../../../../lib/types";
 import User from "../../../../schemas/user";
 
 const getUser = async (userId: number) => {
+  console.log("HERE");
   const user = await User.findByPk(userId);
   return user;
 };

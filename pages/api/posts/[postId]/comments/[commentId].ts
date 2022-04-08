@@ -6,6 +6,7 @@ import {
   UserSchema,
 } from "../../../../../lib/types";
 import Comment from "../../../../../schemas/comment";
+import User from "../../../../../schemas/user";
 
 const getComment = async (postId: number, commentId: number) => {
   const comment = await Comment.findOne({
@@ -13,6 +14,7 @@ const getComment = async (postId: number, commentId: number) => {
       PostId: postId,
       id: commentId,
     },
+    include: User,
   });
   return comment;
 };
@@ -45,7 +47,7 @@ const updateComment = async (
 
 const commentsFinder = async (req: NextApiRequest, res: NextApiResponse) => {
   let { postId, commentId }: CommentPostQuery = req.query;
-  const { body } = req.body;
+  const { body }: { body: string } = req.body;
   let user;
   if (req.method !== "GET") {
     try {
@@ -63,7 +65,7 @@ const commentsFinder = async (req: NextApiRequest, res: NextApiResponse) => {
       break;
     case "PUT":
       if (body) {
-        comment = await updateComment(postId, commentId, user, String(body));
+        comment = await updateComment(postId, commentId, user, body);
       }
       break;
     default:

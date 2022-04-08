@@ -1,9 +1,7 @@
 import PropTypes from "prop-types";
-import { useContext } from "react";
 import { createGlobalStyle } from "styled-components";
 import NavBar from "../components/NavBar";
 import SecondaryNav from "../components/SecondaryNav";
-import AppContext from "../lib/AppContext";
 import ColorPalette from "../styles/ColorPalette";
 
 const GlobalStyles = createGlobalStyle`
@@ -22,8 +20,6 @@ const GlobalStyles = createGlobalStyle`
 `;
 
 function Layout({ children }) {
-  const [appData] = useContext(AppContext);
-  console.log(appData);
   return (
     <>
       <GlobalStyles />

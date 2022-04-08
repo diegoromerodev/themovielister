@@ -45,7 +45,6 @@ const postsHandler = async (req: NextApiRequest, res: NextApiResponse) => {
         break;
     }
   } catch (err) {
-    console.log(err);
     return res.status(400).send({ error: err });
   }
   return res.json(postData);
