@@ -7,6 +7,7 @@ import {
   SectionContainer,
   SectionHeader,
 } from "../../../components/tabloids";
+import { SecondaryParagraph } from "../../../components/typography";
 import { UserSchema } from "../../../lib/types";
 import { calculateAge } from "../../../lib/utils";
 import ColorPalette from "../../../styles/ColorPalette";
@@ -16,6 +17,7 @@ const UserDetailsAvatarContainer = styled.div`
   height: 7rem;
   overflow: hidden;
   position: relative;
+  flex-shrink: 0;
   img {
     width: 100%;
   }
@@ -33,6 +35,7 @@ const NoPostsSign = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
+  padding-bottom: 1rem;
   h3 {
     font-size: 4rem;
     color: ${ColorPalette.gray};
@@ -54,10 +57,16 @@ function UserDetailsHandler({ userData }: { userData: UserSchema }) {
             <Image src={userData.avatarURL} layout="fill" objectFit="cover" />
           </UserDetailsAvatarContainer>
           <div>
-            <h1>{userData.username}</h1>
-            <p>
-              Member since: {calculateAge(new Date(userData.createdAt))} ago
-            </p>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <div>
+                <h1>{userData.username}</h1>
+                <p>
+                  Member since: {calculateAge(new Date(userData.createdAt))} ago
+                </p>
+              </div>
+              <h4>{userData.role.toUpperCase()}</h4>
+            </div>
+            <SecondaryParagraph>{userData.bio}</SecondaryParagraph>
           </div>
         </UserDetailsInfoContainer>
       </SectionContainer>

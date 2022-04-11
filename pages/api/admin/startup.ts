@@ -27,11 +27,11 @@ const startupHandler = async (req: NextApiRequest, res: NextApiResponse) => {
       username: "dieg0r0m3r0",
       avatarURL: "https://i.ytimg.com/vi/EbUsZEs_1Yg/maxresdefault.jpg",
       password: await bcrypt.hash("5278182@@@@", 5),
+      bio: "A tall, solidly-built, fair skinned man with a triangular face. He has a distinctive walk, has straight, black hair, and has tattoos fully covering his face, left leg, hands and neck.",
       role: "admin",
     });
     return res.status(200).send("SUCCESS");
   } catch (e) {
-    console.log(e);
     return res.status(500).send("FAILED");
   }
 };

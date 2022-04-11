@@ -11,6 +11,10 @@ const User = pgSequelize.define("User", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  bio: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
   email: {
     type: DataTypes.STRING,
     unique: true,

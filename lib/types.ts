@@ -16,6 +16,7 @@ export interface UserSchema extends Model {
   avatarURL?: string;
   firstName?: string;
   lastName?: string;
+  bio?: string;
   email?: string;
   password?: string;
   role?: string;

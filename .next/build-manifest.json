@@ -25,10 +25,11 @@
       "static/chunks/main.js",
       "static/chunks/pages/_error.js"
     ],
-    "/posts/[postId]": [
+    "/_middleware": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/posts/[postId].js"
+      "server/middleware-runtime.js",
+      "server/pages/_middleware.js"
     ],
     "/users/[userId]": [
       "static/chunks/webpack.js",
