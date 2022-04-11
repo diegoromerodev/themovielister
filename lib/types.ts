@@ -19,6 +19,7 @@ export interface UserSchema extends Model {
   email?: string;
   password?: string;
   role?: string;
+  Posts?: PostSchema[];
 }
 
 export interface CategorySchema extends Model {

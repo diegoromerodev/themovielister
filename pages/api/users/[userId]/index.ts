@@ -1,11 +1,19 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import tokenMiddleware from "../../../../lib/tokenMiddleware";
-import { UserSchema } from "../../../../lib/types";
+import { PostSchema, UserSchema } from "../../../../lib/types";
+import Movie from "../../../../schemas/movie";
+import Post from "../../../../schemas/post";
 import User from "../../../../schemas/user";
 
 const getUser = async (userId: number) => {
-  console.log("HERE");
-  const user = await User.findByPk(userId);
+  const user: UserSchema = await User.findByPk(userId);
+  const postsByUser: PostSchema[] = await Post.findAll({
+    where: {
+      UserId: user.id,
+    },
+    include: [Movie, User],
+  });
+  user.setDataValue("Posts", postsByUser);
   return user;
 };
 

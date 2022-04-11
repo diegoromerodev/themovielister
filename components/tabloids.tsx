@@ -1,4 +1,8 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
+import Image from "next/image";
+import Link from "next/link";
 import styled from "styled-components";
+import { PostSchema } from "../lib/types";
 import ColorPalette from "../styles/ColorPalette";
 
 export const SectionContainer = styled.section`
@@ -107,3 +111,44 @@ export const BoldTextShadow = styled.h4`
   text-shadow: 1px 1px 5px ${ColorPalette.darker},
     2px 2px 10px ${ColorPalette.darker};
 `;
+
+export function PostPreviewDetails({ post }: { post: PostSchema }) {
+  return (
+    <PostItem>
+      <Link href={`/movies/${post.Movie.imdbId}`} passHref>
+        <MovieThumb>
+          <div>
+            <Image
+              layout="fill"
+              objectFit="cover"
+              src={post.Movie.imageURL}
+              alt={`${post.Movie.title} poster`}
+            />
+            <BoldTextShadow>
+              {post.Movie.title} ({post.Movie.year})
+            </BoldTextShadow>
+          </div>
+        </MovieThumb>
+      </Link>
+      <PostInfo>
+        <Link key={`post-index-${post.id}`} href={`/posts/${post.id}`} passHref>
+          <HoverLink>{post.title}</HoverLink>
+        </Link>
+        <small>Created on {new Date(post.createdAt).toUTCString()}</small>
+      </PostInfo>
+      <UserThumb>
+        <div className="user-thumb-info">
+          <p>Created by:</p>
+          <Link href={`/users/${post.User.id}`} passHref>
+            <HoverLink>{post.User.username}</HoverLink>
+          </Link>
+        </div>
+        <Link href={`/users/${post.User.id}`} passHref>
+          <a className="user-thumb-img">
+            <Image src={post.User.avatarURL} objectFit="cover" layout="fill" />
+          </a>
+        </Link>
+      </UserThumb>
+    </PostItem>
+  );
+}
