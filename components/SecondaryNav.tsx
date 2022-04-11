@@ -31,8 +31,8 @@ const LighterNavContainer = styled.div`
 function SecondaryNav() {
   return (
     <LighterNavContainer>
-      <Link href="/trending" passHref>
-        Trending
+      <Link href="/posts/create" passHref>
+        Create Post
       </Link>
       <p>|</p>
       <Link href="/lounge" passHref>

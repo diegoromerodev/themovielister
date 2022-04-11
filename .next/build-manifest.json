@@ -31,10 +31,10 @@
       "server/middleware-runtime.js",
       "server/pages/_middleware.js"
     ],
-    "/users/[userId]": [
+    "/posts/create": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/users/[userId].js"
+      "static/chunks/pages/posts/create.js"
     ]
   },
   "ampFirstPages": []

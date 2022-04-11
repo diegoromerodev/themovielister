@@ -77,19 +77,27 @@ function NavBar() {
         </NavLogo>
       </Link>
       <AbsoluteUserThumb className="grow">
-        <div className="user-thumb-info">
-          <p>Logged in as:</p>
-          <Link href={`/users/${userData.id}`} passHref>
-            <HoverLink>{userData.username}</HoverLink>
-          </Link>
-        </div>
-        <Link href={`/users/${userData.id}`} passHref>
-          <a href={`/users/${userData.id}`} className="user-thumb-img">
-            {userData.avatarURL && (
-              <Image src={userData.avatarURL} objectFit="cover" layout="fill" />
-            )}
-          </a>
-        </Link>
+        {userData.username && (
+          <>
+            <div className="user-thumb-info">
+              <p>Logged in as:</p>
+              <Link href={`/users/${userData.id}`} passHref>
+                <HoverLink>{userData.username}</HoverLink>
+              </Link>
+            </div>
+            <Link href={`/users/${userData.id}`} passHref>
+              <a href={`/users/${userData.id}`} className="user-thumb-img">
+                {userData.avatarURL && (
+                  <Image
+                    src={userData.avatarURL}
+                    objectFit="cover"
+                    layout="fill"
+                  />
+                )}
+              </a>
+            </Link>
+          </>
+        )}
       </AbsoluteUserThumb>
     </NavContainer>
   );
