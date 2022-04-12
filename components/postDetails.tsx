@@ -69,6 +69,7 @@ export const SubmitButton = styled.button`
   background-color: ${ColorPalette.gray};
   font-weight: 600;
   cursor: pointer;
+  font-family: "Inter";
   :hover {
     background-color: ${ColorPalette.dark};
   }
