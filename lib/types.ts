@@ -57,6 +57,7 @@ export interface CommentPostQuery {
 export type AppDataContext = [
   {
     userData: UserSchema;
+    token: string;
   },
   Dispatch<SetStateAction<unknown>>
 ];

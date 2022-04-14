@@ -22,7 +22,7 @@ const useLogin = (token: string) => {
     verifyRequest();
   }, [token]);
 
-  return { userData };
+  return { userData, token };
 };
 
 export default useLogin;

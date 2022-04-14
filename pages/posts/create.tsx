@@ -1,14 +1,20 @@
-import { FormEvent, useState } from "react";
-import styled from "styled-components";
+import { ChangeEvent, FormEvent, useContext, useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { RawDraftContentState } from "react-draft-wysiwyg";
 import draftToHtml from "draftjs-to-html";
 import axios from "axios";
+import { useRouter } from "next/router";
 import { StyledTextInput } from "../../components/forms";
 import { SectionContainer, SectionHeader } from "../../components/tabloids";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import ColorPalette from "../../styles/ColorPalette";
 import { SubmitButton } from "../../components/postDetails";
+import { AppDataContext, PostSchema } from "../../lib/types";
+import AppContext from "../../lib/AppContext";
+import {
+  CreatePostForm,
+  RichEditorWrapper,
+  StyledSelect,
+} from "../../components/createPost";
 
 const Editor = dynamic(
   async () => {
@@ -18,53 +24,35 @@ const Editor = dynamic(
   { ssr: false }
 );
 
-const CreatePostForm = styled.form`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  padding: 1rem;
-  gap: 1rem;
-`;
-
-const RichEditorWrapper = styled.div`
-  .editor-toolbar {
-    background-color: ${ColorPalette.darker};
-    border: 1px solid ${ColorPalette.gray};
-    align-items: center;
-    justify-content: center;
-    border-radius: 0;
-    margin-bottom: 0;
-  }
-  .editor-body {
-    padding: 0.5rem 1rem;
-    border: 1px solid ${ColorPalette.gray};
-    border-top: none;
-    min-height: 50vh;
-  }
-  .rdw-option-wrapper {
-    background-color: ${ColorPalette.lightGray};
-    border-radius: 0;
-    border: 1px solid ${ColorPalette.gray};
-    a {
-      color: ${ColorPalette.darker};
-      border: 1px solid red;
-    }
-    &:hover {
-      background-color: ${ColorPalette.light};
-      border: 1px solid transparent;
-    }
-  }
-  .rdw-dropdown-wrapper {
-    color: ${ColorPalette.darker};
-  }
-`;
-
 function CreatePost() {
   const [bodyText, setBodyText] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("1");
+  const [allCategories, setAllCategories] = useState([]);
+  const [appData]: AppDataContext = useContext(AppContext);
+  const router = useRouter();
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      const allCatsRes = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/categories`
+      );
+      const allCatsData = allCatsRes.data;
+      if (allCatsData) {
+        setAllCategories(allCatsData);
+      }
+    };
+
+    fetchCategories().catch(() => setAllCategories([]));
+  }, []);
 
   const handleBodyChange = (contentState: RawDraftContentState) => {
     const markup = draftToHtml(contentState);
     setBodyText(markup);
+  };
+
+  const handleCategorySelection = (e: ChangeEvent<HTMLSelectElement>) => {
+    const categoryId = e.currentTarget.value;
+    setSelectedCategory(categoryId);
   };
 
   const submitPost = async (e: FormEvent<HTMLFormElement>) => {
@@ -72,10 +60,23 @@ function CreatePost() {
     const reqBody = {
       title: e.currentTarget["post-title"].value,
       movie: e.currentTarget.movie.value,
+      category: selectedCategory,
       body: bodyText,
     };
-    await axios.post(`${process.env.API_URL}/posts`, reqBody);
-    return true;
+    const postingRes = await axios.post(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/posts`,
+      reqBody,
+      {
+        headers: {
+          Authorization: appData.token,
+        },
+      }
+    );
+    const savedPost: PostSchema = postingRes.data;
+    if (savedPost) {
+      return router.push(`/posts/${savedPost.id}`);
+    }
+    return false;
   };
 
   return (
@@ -92,6 +93,16 @@ function CreatePost() {
             onChange={handleBodyChange}
           />
         </RichEditorWrapper>
+        <StyledSelect
+          value={selectedCategory}
+          onChange={handleCategorySelection}
+        >
+          {allCategories.map((c) => (
+            <option key={`categories-${c.id}`} value={c.id}>
+              {c.name}
+            </option>
+          ))}
+        </StyledSelect>
         <SubmitButton>Submit post</SubmitButton>
       </CreatePostForm>
     </SectionContainer>

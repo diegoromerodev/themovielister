@@ -13,15 +13,15 @@ interface ExtendedAppProps extends AppProps {
 }
 
 function App({ Component, pageProps }: ExtendedAppProps) {
-  const appDataHooks = useState({ userData: {} });
+  const appDataHooks = useState({ userData: {}, token: "" });
   const [appData, setAppData] = appDataHooks;
-  const { userData } = useLogin(
+  const { userData, token } = useLogin(
     "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJ1c2VybmFtZSI6ImRpZWcwcjBtM3IwIiwiYXZhdGFyVVJMIjoiaHR0cHM6Ly9pLnl0aW1nLmNvbS92aS9FYlVzWkVzXzFZZy9tYXhyZXNkZWZhdWx0LmpwZyIsImJpbyI6IkEgdGFsbCwgc29saWRseS1idWlsdCwgZmFpciBza2lubmVkIG1hbiB3aXRoIGEgdHJpYW5ndWxhciBmYWNlLiBIZSBoYXMgYSBkaXN0aW5jdGl2ZSB3YWxrLCBoYXMgc3RyYWlnaHQsIGJsYWNrIGhhaXIsIGFuZCBoYXMgdGF0dG9vcyBmdWxseSBjb3ZlcmluZyBoaXMgZmFjZSwgbGVmdCBsZWcsIGhhbmRzIGFuZCBuZWNrLiIsImVtYWlsIjoiZGllZ29yb21lcm94ZEBlbWFpbC5jb20iLCJmaXJzdE5hbWUiOiJEaWVnbyIsImxhc3ROYW1lIjoiUm9tZXJvIiwicGFzc3dvcmQiOiIkMmEkMDUkN3Y5SnQ5YVh3Rlp3UWVDaktYQXZhLkNRMUhnY2JzbkJMUTU0RmN2YW85ZUd0bi9aWUNzTlMiLCJyb2xlIjoiYWRtaW4iLCJjcmVhdGVkQXQiOiIyMDIyLTA0LTExVDAyOjAzOjEyLjkxNloiLCJ1cGRhdGVkQXQiOiIyMDIyLTA0LTExVDAyOjAzOjEyLjkxNloifSwiaWF0IjoxNjQ5NjQyNjM4fQ.iAjoOW4dDfYU2hd2fhnPU0aX8f8AkTKuS0wtrWrQgNI"
   );
 
   useEffect(() => {
     if (userData) {
-      setAppData({ ...appData, userData });
+      setAppData({ ...appData, userData, token });
     }
   }, [userData]);
 
