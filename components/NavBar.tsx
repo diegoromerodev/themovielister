@@ -1,11 +1,11 @@
 import Link from "next/link";
 import { useContext } from "react";
 import styled from "styled-components";
-import Image from "next/image";
 import AppContext from "../lib/AppContext";
 import { AppDataContext } from "../lib/types";
 import ColorPalette from "../styles/ColorPalette";
 import { HoverLink, UserThumb } from "./tabloids";
+import { CircularAvatar } from "./userDetails";
 
 const NavContainer = styled.nav`
   background-color: ${ColorPalette.dark};
@@ -86,14 +86,8 @@ function NavBar() {
               </Link>
             </div>
             <Link href={`/users/${userData.id}`} passHref>
-              <a href={`/users/${userData.id}`} className="user-thumb-img">
-                {userData.avatarURL && (
-                  <Image
-                    src={userData.avatarURL}
-                    objectFit="cover"
-                    layout="fill"
-                  />
-                )}
+              <a>
+                <CircularAvatar imageURL={userData.avatarURL} />
               </a>
             </Link>
           </>

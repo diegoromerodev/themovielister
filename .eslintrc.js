@@ -20,6 +20,14 @@ module.exports = {
   parser: "@typescript-eslint/parser",
   plugins: ["react", "@typescript-eslint"],
   rules: {
+    "jsx-a11y/anchor-is-valid": [
+      "error",
+      {
+        components: ["Link"],
+        specialLink: ["hrefLeft", "hrefRight"],
+        aspects: ["invalidHref", "preferButton"],
+      },
+    ],
     "react/react-in-jsx-scope": 0,
     "react/jsx-filename-extension": [
       1,

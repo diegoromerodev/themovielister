@@ -5,6 +5,7 @@ import PropTypes, { number } from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFilm, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FormEvent, useContext, useState } from "react";
+import HTMLReactParser from "html-react-parser";
 import { HoverLink, SectionContainer } from "../../../components/tabloids";
 import { AppDataContext, CommentSchema, PostSchema } from "../../../lib/types";
 import pgSequelize from "../../../lib/sequelize";
@@ -76,7 +77,7 @@ function MovieDetails({
             postCount={postCountHash[postData.User.username]}
           />
           <MovieDetailsContainer>
-            <p>{postData.body}</p>
+            {HTMLReactParser(postData.body)}
           </MovieDetailsContainer>
         </PostDetailsContainer>
       </SectionContainer>

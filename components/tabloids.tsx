@@ -2,8 +2,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import styled from "styled-components";
+import ellipsize from "ellipsize";
 import { PostSchema } from "../lib/types";
 import ColorPalette from "../styles/ColorPalette";
+import { CircularAvatar } from "./userDetails";
 
 export const SectionContainer = styled.section`
   display: flex;
@@ -88,17 +90,6 @@ export const UserThumb = styled.div`
       font-size: 0.7rem;
     }
   }
-  .user-thumb-img {
-    width: 3rem;
-    overflow: hidden;
-    height: 3rem;
-    position: relative;
-    border-radius: 50%;
-    border: 1px solid ${ColorPalette.gray};
-    img {
-      position: absolute;
-    }
-  }
 `;
 
 export const HoverLink = styled.a`
@@ -107,9 +98,14 @@ export const HoverLink = styled.a`
   }
 `;
 
-export const BoldTextShadow = styled.h4`
+interface BoldTextShadowProps {
+  align?: string;
+}
+
+export const BoldTextShadow = styled.h4<BoldTextShadowProps>`
   text-shadow: 1px 1px 5px ${ColorPalette.darker},
     2px 2px 10px ${ColorPalette.darker};
+  text-align: ${({ align }) => align};
 `;
 
 export function PostPreviewDetails({ post }: { post: PostSchema }) {
@@ -124,8 +120,8 @@ export function PostPreviewDetails({ post }: { post: PostSchema }) {
               src={post.Movie.imageURL}
               alt={`${post.Movie.title} poster`}
             />
-            <BoldTextShadow>
-              {post.Movie.title} ({post.Movie.year})
+            <BoldTextShadow align="center">
+              {ellipsize(post.Movie.title, 30)} ({post.Movie.year})
             </BoldTextShadow>
           </div>
         </MovieThumb>
@@ -144,9 +140,7 @@ export function PostPreviewDetails({ post }: { post: PostSchema }) {
           </Link>
         </div>
         <Link href={`/users/${post.User.id}`} passHref>
-          <a className="user-thumb-img">
-            <Image src={post.User.avatarURL} objectFit="cover" layout="fill" />
-          </a>
+          <CircularAvatar imageURL={post.User.avatarURL} />
         </Link>
       </UserThumb>
     </PostItem>

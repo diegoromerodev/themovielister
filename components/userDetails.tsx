@@ -1,3 +1,4 @@
+import Image from "next/image";
 import styled from "styled-components";
 import ColorPalette from "../styles/ColorPalette";
 
@@ -40,3 +41,23 @@ export const UserDetailsContainer = styled.aside`
     align-items: flex-start;
   }
 `;
+const RoundImageContainer = styled.div`
+  width: 3rem;
+  overflow: hidden;
+  height: 3rem;
+  position: relative;
+  border-radius: 50%;
+  border: 1px solid ${ColorPalette.gray};
+  img {
+    position: absolute;
+  }
+`;
+
+export function CircularAvatar({ imageURL }: { imageURL: string }) {
+  if (!imageURL) return null;
+  return (
+    <RoundImageContainer>
+      <Image src={imageURL} objectFit="cover" layout="fill" />
+    </RoundImageContainer>
+  );
+}
