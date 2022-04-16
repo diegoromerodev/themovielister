@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { StringOptions } from "sass";
 import styled from "styled-components";
 import ColorPalette from "../styles/ColorPalette";
 
@@ -41,10 +42,16 @@ export const UserDetailsContainer = styled.aside`
     align-items: flex-start;
   }
 `;
-const RoundImageContainer = styled.div`
-  width: 3rem;
+
+interface RoundAvatarProps {
+  width?: string;
+  height?: string;
+}
+
+const RoundImageContainer = styled.div<RoundAvatarProps>`
+  width: ${({ width }) => width};
+  height: ${({ height }) => height};
   overflow: hidden;
-  height: 3rem;
   position: relative;
   border-radius: 50%;
   border: 1px solid ${ColorPalette.gray};
@@ -53,11 +60,24 @@ const RoundImageContainer = styled.div`
   }
 `;
 
-export function CircularAvatar({ imageURL }: { imageURL: string }) {
+export function CircularAvatar({
+  imageURL,
+  width,
+  height,
+}: {
+  imageURL: string;
+  width?: string;
+  height?: string;
+}) {
   if (!imageURL) return null;
   return (
-    <RoundImageContainer>
+    <RoundImageContainer width={width} height={height}>
       <Image src={imageURL} objectFit="cover" layout="fill" />
     </RoundImageContainer>
   );
 }
+
+CircularAvatar.defaultProps = {
+  width: "3rem",
+  height: "3rem",
+};

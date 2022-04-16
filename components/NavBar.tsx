@@ -77,7 +77,7 @@ function NavBar() {
         </NavLogo>
       </Link>
       <AbsoluteUserThumb className="grow">
-        {userData.username && (
+        {userData?.username && (
           <>
             <div className="user-thumb-info">
               <p>Logged in as:</p>
