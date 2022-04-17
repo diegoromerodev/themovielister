@@ -1,5 +1,8 @@
 import Link from "next/link";
+import { useContext } from "react";
 import styled from "styled-components";
+import AppContext from "../lib/AppContext";
+import { AppDataContext } from "../lib/types";
 import ColorPalette from "../styles/ColorPalette";
 
 const LighterNavContainer = styled.div`
@@ -29,19 +32,30 @@ const LighterNavContainer = styled.div`
 `;
 
 function SecondaryNav() {
+  const [appData]: AppDataContext = useContext(AppContext);
   return (
     <LighterNavContainer>
-      <Link href="/posts/create" passHref>
-        Create Post
-      </Link>
-      <p>|</p>
-      <Link href="/lounge" passHref>
-        Lounge
-      </Link>
-      <p>|</p>
-      <Link href="/about" passHref>
-        About
-      </Link>
+      {appData.userData?.username ? (
+        <>
+          <Link href="/posts/create" passHref>
+            Create Post
+          </Link>
+          <p>|</p>
+          <Link href="/about" passHref>
+            About
+          </Link>
+        </>
+      ) : (
+        <>
+          <Link href="/auth/signup" passHref>
+            Create Account
+          </Link>
+          <p>|</p>
+          <Link href="/auth/login" passHref>
+            Login
+          </Link>
+        </>
+      )}
     </LighterNavContainer>
   );
 }

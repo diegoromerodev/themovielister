@@ -10,7 +10,7 @@ const useLogin = (token: string) => {
         `${process.env.NEXT_PUBLIC_API_URL}/api/auth/verify`,
         {
           headers: {
-            Authorization: token,
+            Authorization: `Bearer ${token}`,
           },
           method: "POST",
         }

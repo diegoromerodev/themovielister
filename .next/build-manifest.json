@@ -15,6 +15,11 @@
     "static/development/_middlewareManifest.js"
   ],
   "pages": {
+    "/": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/index.js"
+    ],
     "/_app": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
@@ -31,10 +36,10 @@
       "server/middleware-runtime.js",
       "server/pages/_middleware.js"
     ],
-    "/auth/logout": [
+    "/auth/login": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/auth/logout.js"
+      "static/chunks/pages/auth/login.js"
     ]
   },
   "ampFirstPages": []

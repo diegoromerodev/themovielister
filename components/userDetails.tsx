@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { StringOptions } from "sass";
 import styled from "styled-components";
 import ColorPalette from "../styles/ColorPalette";
 

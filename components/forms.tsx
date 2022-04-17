@@ -17,3 +17,10 @@ export const StyledTextInput = styled.input`
 export const PostBodyArea = styled.textarea`
   background: transparent;
 `;
+
+export const FormContainer = styled.form`
+  padding: 1rem;
+  display: grid;
+  gap: 1rem;
+  text-align: center;
+`;
