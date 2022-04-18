@@ -54,10 +54,12 @@ export interface CommentPostQuery {
   commentId?: string | number | undefined;
 }
 
+export interface AppDataState {
+  userData?: UserSchema;
+  token: string;
+}
+
 export type AppDataContext = [
-  {
-    userData: UserSchema;
-    token: string;
-  },
-  Dispatch<SetStateAction<unknown>>
+  AppDataState,
+  Dispatch<SetStateAction<AppDataState>>
 ];

@@ -1,12 +1,15 @@
 import axios from "axios";
 import { useRouter } from "next/router";
-import { FormEvent } from "react";
+import { FormEvent, useContext } from "react";
 import { FormContainer, StyledTextInput } from "../../components/forms";
 import { SubmitButton } from "../../components/postDetails";
 import { SectionContainer, SectionHeader } from "../../components/tabloids";
 import { PrimaryThinHeader } from "../../components/typography";
+import AppContext from "../../lib/AppContext";
+import { AppDataContext } from "../../lib/types";
 
 function LoginPage() {
+  const [, setAppData]: AppDataContext = useContext(AppContext);
   const router = useRouter();
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -22,6 +25,7 @@ function LoginPage() {
       );
       if (token) {
         localStorage.setItem("loginToken", token.data);
+        setAppData((prevData) => ({ ...prevData, token: token.data }));
       }
       router.push("/");
     } catch (err) {

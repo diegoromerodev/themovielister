@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 
 const useLogin = (token: string) => {
-  const [userData, setUserData] = useState({});
+  debugger;
+  const [userData, setUserData] = useState(null);
   useEffect(() => {
     if (!token) return;
-
     const verifyRequest = async () => {
       const verifyRes = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/auth/verify`,

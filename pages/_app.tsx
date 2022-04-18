@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import Layout from "./layout";
 import AppContext from "../lib/AppContext";
 import useLogin from "../lib/hooks/useLogin";
+import { AppDataContext } from "../lib/types";
+import useAxiosInterceptor from "../lib/hooks/axiosInterceptor";
 
 interface ExtendedAppProps extends AppProps {
   userData: {
@@ -13,21 +15,21 @@ interface ExtendedAppProps extends AppProps {
 }
 
 function App({ Component, pageProps }: ExtendedAppProps) {
-  const appDataHooks = useState({ userData: {}, token: "" });
-  const [appData, setAppData] = appDataHooks;
-  const [loginToken, setLoginToken] = useState("");
-  const { userData, token } = useLogin(loginToken);
+  const appDataHooks = useState({ userData: null, token: null });
+  const [appData, setAppData]: AppDataContext = appDataHooks;
+  const { userData } = useLogin(appData.token);
+  useAxiosInterceptor(appData.token);
 
   useEffect(() => {
     if (userData) {
-      setAppData({ ...appData, userData, token });
+      setAppData({ ...appData, userData });
     }
   }, [userData]);
 
   useEffect(() => {
     const logToken = localStorage.getItem("loginToken");
     if (logToken) {
-      setLoginToken(logToken);
+      setAppData({ ...appData, token: logToken });
     }
   }, []);
 

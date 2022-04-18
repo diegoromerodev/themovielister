@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import { useContext } from "react";
 import styled from "styled-components";
 import { SubmitButton } from "../../components/postDetails";
@@ -16,10 +17,12 @@ const LogoutScreenContainer = styled.div`
 
 function LogoutPage() {
   const [appData, setAppData]: AppDataContext = useContext(AppContext);
+  const router = useRouter();
 
   const handleLogoutClick = () => {
     localStorage.clear();
-    setAppData({});
+    setAppData({ userData: null, token: null });
+    router.push("/auth/login");
   };
 
   if (!appData.userData?.username) return null;
