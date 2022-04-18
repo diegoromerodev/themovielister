@@ -28,6 +28,7 @@ module.exports = {
         aspects: ["invalidHref", "preferButton"],
       },
     ],
+    "no-debugger": 0,
     "react/react-in-jsx-scope": 0,
     "react/jsx-filename-extension": [
       1,

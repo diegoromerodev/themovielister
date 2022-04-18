@@ -11,17 +11,22 @@ function LoginPage() {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const { username, password } = e.currentTarget;
-    const token = await axios.post(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/auth`,
-      {
-        username: username.value,
-        password: password.value,
+    debugger;
+    try {
+      const token = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/auth`,
+        {
+          username: username.value,
+          password: password.value,
+        }
+      );
+      if (token) {
+        localStorage.setItem("loginToken", token.data);
       }
-    );
-    if (token) {
-      localStorage.setItem("loginToken", token.data);
+      router.push("/");
+    } catch (err) {
+      router.reload();
     }
-    router.push("/");
   };
 
   return (
