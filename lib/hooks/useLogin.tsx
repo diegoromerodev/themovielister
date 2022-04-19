@@ -5,15 +5,12 @@ const useLogin = (token: string) => {
   useEffect(() => {
     if (!token) return;
     const verifyRequest = async () => {
-      const verifyRes = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/verify`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          method: "POST",
-        }
-      );
+      const verifyRes = await fetch("/api/auth/verify", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        method: "POST",
+      });
       const dataRes = await verifyRes.json();
       setUserData(dataRes);
     };

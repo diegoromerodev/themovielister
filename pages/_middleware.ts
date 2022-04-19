@@ -1,20 +1,8 @@
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
+// SERVER-SIDE MIDDLEWARE HANDLER
 const MiddlewareHandler = async (req: NextRequest) => {
-  const tokenString = req.headers.get("Authorization");
-  if (tokenString) {
-    const verifyRes = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/auth/verify`,
-      {
-        headers: {
-          Authorization: tokenString,
-        },
-        method: "POST",
-      }
-    );
-    const userData = await verifyRes.json();
-    global.CURR_USR = userData;
-  }
+  return NextResponse.next();
 };
 
 export default MiddlewareHandler;

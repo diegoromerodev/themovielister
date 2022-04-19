@@ -25,7 +25,8 @@ const startupHandler = async (req: NextApiRequest, res: NextApiResponse) => {
       lastName: "Romero",
       email: "diegoromeroxd@email.com",
       username: "dieg0r0m3r0",
-      avatarURL: "https://i.ytimg.com/vi/EbUsZEs_1Yg/maxresdefault.jpg",
+      avatarURL:
+        "https://pbs.twimg.com/profile_images/1097177754963988480/3l0y3F-3_400x400.jpg",
       password: await bcrypt.hash("5278182@@@@", 5),
       bio: "A tall, solidly-built, fair skinned man with a triangular face. He has a distinctive walk, has straight, black hair, and has tattoos fully covering his face, left leg, hands and neck.",
       role: "admin",

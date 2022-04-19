@@ -1,11 +1,11 @@
-import axios from "axios";
 import type { NextApiRequest, NextApiResponse } from "next";
+import { serverAxios } from "../../../lib/serverside/serverAxiosInterceptors";
 import Movie from "../../../schemas/movie";
 
 export const addMovie = async (imdbId: string) => {
   try {
     const movieAPI = `http://www.omdbapi.com/?apikey=${process.env.NEXT_PUBLIC_MOVIEKEY}&i=${imdbId}`;
-    const movieRes = await axios.get(movieAPI);
+    const movieRes = await serverAxios.get(movieAPI);
     const movieInfo = movieRes.data;
     const movieData = await Movie.create({
       title: movieInfo.Title,

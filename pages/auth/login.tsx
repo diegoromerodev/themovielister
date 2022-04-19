@@ -14,13 +14,10 @@ function LoginPage() {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const { username, password } = e.currentTarget;
-    const token = await customAxios.post(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/auth`,
-      {
-        username: username.value,
-        password: password.value,
-      }
-    );
+    const token = await customAxios.post("/api/auth", {
+      username: username.value,
+      password: password.value,
+    });
     if (token) {
       localStorage.setItem("loginToken", token.data);
       setAppData((prevData) => ({ ...prevData, token: token.data }));

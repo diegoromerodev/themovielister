@@ -1,4 +1,3 @@
-import axios from "axios";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import Image from "next/image";
 import styled from "styled-components";
@@ -8,6 +7,7 @@ import {
   SectionHeader,
 } from "../../../components/tabloids";
 import { SecondaryParagraph } from "../../../components/typography";
+import { serverAxios } from "../../../lib/serverside/serverAxiosInterceptors";
 import { UserSchema } from "../../../lib/types";
 import { calculateAge } from "../../../lib/utils";
 import ColorPalette from "../../../styles/ColorPalette";
@@ -91,8 +91,8 @@ function UserDetailsHandler({ userData }: { userData: UserSchema }) {
 export const getServerSideProps: GetServerSideProps = async (
   context: GetServerSidePropsContext
 ) => {
-  const userDataRes = await axios.get(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/users/${context.query.userId}`
+  const userDataRes = await serverAxios.get(
+    `/api/users/${context.query.userId}`
   );
   const userData = userDataRes.data;
   return {

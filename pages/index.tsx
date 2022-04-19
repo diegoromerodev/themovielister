@@ -29,16 +29,10 @@ function HomePage({ categories }: { categories: CategorySchema[] }) {
 }
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  let categories: CategorySchema;
-  try {
-    await pgSequelize.sync({ force: true });
-    const catRes = await customAxios.get(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/categories`
-    );
-    categories = catRes.data;
-  } catch (err) {
-    throw new Error(err);
-  }
+  await pgSequelize.sync({ force: true });
+  const catRes = await customAxios.get("/api/categories");
+  const categories: CategorySchema = catRes.data;
+
   return {
     props: {
       categories,

@@ -33,9 +33,7 @@ function CreatePost() {
 
   useEffect(() => {
     const fetchCategories = async () => {
-      const allCatsRes = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/categories`
-      );
+      const allCatsRes = await axios.get("/api/categories");
       const allCatsData = allCatsRes.data;
       if (allCatsData) {
         setAllCategories(allCatsData);
@@ -63,15 +61,7 @@ function CreatePost() {
       category: selectedCategory,
       body: bodyText,
     };
-    const postingRes = await axios.post(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/posts`,
-      reqBody,
-      {
-        headers: {
-          Authorization: appData.token,
-        },
-      }
-    );
+    const postingRes = await axios.post(`/api/posts`, reqBody);
     const savedPost: PostSchema = postingRes.data;
     if (savedPost) {
       return router.push(`/posts/${savedPost.id}`);

@@ -9,7 +9,9 @@ interface InterceptorState {
   response: number;
 }
 
-const customAxios = axios.create();
+const customAxios = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
+});
 
 const useAxiosInterceptor = (
   token: string,

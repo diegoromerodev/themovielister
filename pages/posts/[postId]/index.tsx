@@ -17,6 +17,7 @@ import {
 } from "../../../components/postDetails";
 import AppContext from "../../../lib/AppContext";
 import { customAxios } from "../../../lib/hooks/useAxiosInterceptor";
+import { serverAxios } from "../../../lib/serverside/serverAxiosInterceptors";
 
 function MovieDetails({
   postData,
@@ -35,15 +36,9 @@ function MovieDetails({
   ) => {
     e.preventDefault();
     const newCommentRes = await customAxios.post(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/posts/${postData.id}/comments`,
+      `/api/posts/${postData.id}/comments`,
       {
         body,
-      },
-      {
-        headers: {
-          Authorization:
-            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJ1c2VybmFtZSI6ImRpZWcwcjBtM3IwIiwiYXZhdGFyVVJMIjoiaHR0cHM6Ly9pLnl0aW1nLmNvbS92aS9FYlVzWkVzXzFZZy9tYXhyZXNkZWZhdWx0LmpwZyIsImVtYWlsIjoiZGllZ29yb21lcm94ZEBlbWFpbC5jb20iLCJmaXJzdE5hbWUiOiJEaWVnbyIsImxhc3ROYW1lIjoiUm9tZXJvIiwicGFzc3dvcmQiOiIkMmEkMDUkS3AyLjh2clY4dnZsdXYyMWx5TFhCT0Z0Rkl2TmZxaHpqZmI1Rjk1V1htTW5Lbi9zS0hGUkciLCJyb2xlIjoiYWRtaW4iLCJjcmVhdGVkQXQiOiIyMDIyLTA0LTA0VDE4OjAzOjAzLjY2MVoiLCJ1cGRhdGVkQXQiOiIyMDIyLTA0LTA0VDE4OjAzOjAzLjY2MVoifSwiaWF0IjoxNjQ5MDk1Mzg2fQ.hKKc_IMHz-BAz-pl9aYGehZgmFZTk35XygKAjqHpXR8",
-        },
       }
     );
     const commentData: CommentSchema = newCommentRes.data;
@@ -107,11 +102,9 @@ function MovieDetails({
 export const getServerSideProps: GetServerSideProps = async (
   context: GetServerSidePropsContext
 ) => {
-  const postRes = await customAxios.get(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/posts/${context.query.postId}`
-  );
-  const postCommentsRes = await customAxios.get(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/posts/${context.query.postId}/comments`
+  const postRes = await serverAxios.get(`/api/posts/${context.query.postId}`);
+  const postCommentsRes = await serverAxios.get(
+    `/api/posts/${context.query.postId}/comments`
   );
   const postData: PostSchema = postRes.data;
   const comments: CommentSchema[] = postCommentsRes.data;

@@ -140,7 +140,9 @@ export function PostPreviewDetails({ post }: { post: PostSchema }) {
           </Link>
         </div>
         <Link href={`/users/${post.User.id}`} passHref>
-          <CircularAvatar imageURL={post.User.avatarURL} />
+          <a>
+            <CircularAvatar imageURL={post.User.avatarURL} />
+          </a>
         </Link>
       </UserThumb>
     </PostItem>
