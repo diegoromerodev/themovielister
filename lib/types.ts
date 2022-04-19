@@ -57,6 +57,7 @@ export interface CommentPostQuery {
 export interface AppDataState {
   userData?: UserSchema;
   token: string;
+  currentErrors: string[];
 }
 
 export type AppDataContext = [

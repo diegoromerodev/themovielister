@@ -5,7 +5,13 @@ import { useEffect, useState } from "react";
 import Layout from "./layout";
 import AppContext from "../lib/AppContext";
 import useLogin from "../lib/hooks/useLogin";
-import { AppDataContext } from "../lib/types";
+import { AppDataContext, AppDataState } from "../lib/types";
+import useAxiosInterceptor from "../lib/hooks/useAxiosInterceptor";
+import configureAxiosInterceptors from "../lib/serverside/serverAxiosInterceptors";
+
+if (typeof window === "undefined") {
+  configureAxiosInterceptors();
+}
 
 interface ExtendedAppProps extends AppProps {
   userData: {
@@ -14,10 +20,14 @@ interface ExtendedAppProps extends AppProps {
 }
 
 function App({ Component, pageProps }: ExtendedAppProps) {
-  const appDataHooks = useState({ userData: null, token: null });
+  const appDataHooks = useState<AppDataState>({
+    userData: null,
+    token: null,
+    currentErrors: [],
+  });
   const [appData, setAppData]: AppDataContext = appDataHooks;
   const { userData } = useLogin(appData.token);
-
+  useAxiosInterceptor(appData.token, setAppData);
   useEffect(() => {
     if (userData) {
       setAppData({ ...appData, userData });

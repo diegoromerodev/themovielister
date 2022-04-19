@@ -1,4 +1,3 @@
-import axios from "axios";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import Link from "next/link";
 import PropTypes, { number } from "prop-types";
@@ -17,6 +16,7 @@ import {
   UserInfoPostHeader,
 } from "../../../components/postDetails";
 import AppContext from "../../../lib/AppContext";
+import { customAxios } from "../../../lib/hooks/useAxiosInterceptor";
 
 function MovieDetails({
   postData,
@@ -34,7 +34,7 @@ function MovieDetails({
     body: string
   ) => {
     e.preventDefault();
-    const newCommentRes = await axios.post(
+    const newCommentRes = await customAxios.post(
       `${process.env.NEXT_PUBLIC_API_URL}/api/posts/${postData.id}/comments`,
       {
         body,
@@ -107,10 +107,10 @@ function MovieDetails({
 export const getServerSideProps: GetServerSideProps = async (
   context: GetServerSidePropsContext
 ) => {
-  const postRes = await axios.get(
+  const postRes = await customAxios.get(
     `${process.env.NEXT_PUBLIC_API_URL}/api/posts/${context.query.postId}`
   );
-  const postCommentsRes = await axios.get(
+  const postCommentsRes = await customAxios.get(
     `${process.env.NEXT_PUBLIC_API_URL}/api/posts/${context.query.postId}/comments`
   );
   const postData: PostSchema = postRes.data;

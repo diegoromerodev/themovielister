@@ -8,7 +8,7 @@ passport.use(localPassport);
 const authHandler = nextConnect().post(
   (req: NextApiRequest, res: NextApiResponse) => {
     passport.authenticate("local", (error, data) => {
-      if (error) return res.status(403).json({ error });
+      if (error) return res.status(401).json({ error: "Invalid credentials." });
       return res.json(data);
     })(req, res);
   }

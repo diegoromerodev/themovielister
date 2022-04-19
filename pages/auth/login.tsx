@@ -5,7 +5,7 @@ import { SubmitButton } from "../../components/postDetails";
 import { SectionContainer, SectionHeader } from "../../components/tabloids";
 import { PrimaryThinHeader } from "../../components/typography";
 import AppContext from "../../lib/AppContext";
-import { customAxios } from "../../lib/hooks/axiosInterceptor";
+import { customAxios } from "../../lib/hooks/useAxiosInterceptor";
 import { AppDataContext } from "../../lib/types";
 
 function LoginPage() {
@@ -24,8 +24,8 @@ function LoginPage() {
     if (token) {
       localStorage.setItem("loginToken", token.data);
       setAppData((prevData) => ({ ...prevData, token: token.data }));
+      router.push("/");
     }
-    router.push("/");
   };
 
   return (

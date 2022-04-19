@@ -1,6 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { GetServerSideProps } from "next";
-import axios from "axios";
 import PropTypes from "prop-types";
 import pgSequelize from "../lib/sequelize";
 import {
@@ -9,6 +8,7 @@ import {
   SectionHeader,
 } from "../components/tabloids";
 import { CategorySchema } from "../lib/types";
+import { customAxios } from "../lib/hooks/useAxiosInterceptor";
 
 function HomePage({ categories }: { categories: CategorySchema[] }) {
   return (
@@ -32,7 +32,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
   let categories: CategorySchema;
   try {
     await pgSequelize.sync({ force: true });
-    const catRes = await axios.get(
+    const catRes = await customAxios.get(
       `${process.env.NEXT_PUBLIC_API_URL}/api/categories`
     );
     categories = catRes.data;
