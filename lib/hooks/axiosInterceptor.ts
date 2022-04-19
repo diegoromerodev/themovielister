@@ -1,24 +1,54 @@
-import axios from "axios";
-import { useEffect } from "react";
+import customAxios from "axios";
+import { useEffect, useState } from "react";
+
+type interceptorKeys = "request" | "response";
 
 const useAxiosInterceptor = (token: string) => {
-  const setInterceptor = () => {
-    axios.interceptors.request.use(
+  const [interceptors, setInterceptors] = useState<{
+    request: number;
+    response: number;
+  }>({
+    request: null,
+    response: null,
+  });
+  const configureInterceptors = () => {
+    Object.keys(interceptors).forEach((k: interceptorKeys) => {
+      if (!interceptors[k]) return;
+      customAxios.interceptors[k].eject(interceptors[k]);
+    });
+    const requestInterceptor = customAxios.interceptors.request.use(
       (req) => {
+        console.log("HERE");
         if (token) {
           req.headers.Authorization = `Bearer ${token}`;
         }
         return req;
       },
       (err) => {
-        throw new Error(err);
+        debugger;
       }
     );
+
+    const responseInterceptor = customAxios.interceptors.response.use(
+      (res) => {
+        return res;
+      },
+      (err) => {
+        debugger;
+      }
+    );
+
+    setInterceptors({
+      request: requestInterceptor,
+      response: responseInterceptor,
+    });
   };
   useEffect(() => {
     if (!token) return;
-    setInterceptor();
+    configureInterceptors();
   }, [token]);
 };
+
+export { customAxios };
 
 export default useAxiosInterceptor;

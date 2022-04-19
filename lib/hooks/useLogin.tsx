@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 
 const useLogin = (token: string) => {
-  debugger;
   const [userData, setUserData] = useState(null);
   useEffect(() => {
     if (!token) return;

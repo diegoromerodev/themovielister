@@ -6,7 +6,6 @@ import Layout from "./layout";
 import AppContext from "../lib/AppContext";
 import useLogin from "../lib/hooks/useLogin";
 import { AppDataContext } from "../lib/types";
-import useAxiosInterceptor from "../lib/hooks/axiosInterceptor";
 
 interface ExtendedAppProps extends AppProps {
   userData: {
@@ -18,7 +17,6 @@ function App({ Component, pageProps }: ExtendedAppProps) {
   const appDataHooks = useState({ userData: null, token: null });
   const [appData, setAppData]: AppDataContext = appDataHooks;
   const { userData } = useLogin(appData.token);
-  useAxiosInterceptor(appData.token);
 
   useEffect(() => {
     if (userData) {
