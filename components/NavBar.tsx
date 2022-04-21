@@ -1,3 +1,5 @@
+import { faDoorOpen } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import { useContext } from "react";
 import styled from "styled-components";
@@ -64,6 +66,28 @@ const AbsoluteUserThumb = styled(UserThumb)`
   justify-content: flex-end;
 `;
 
+const UserLinkContainer = styled.a`
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  gap: 1rem;
+  :hover {
+    background-color: ${ColorPalette.gray};
+  }
+  .user-link {
+    border-right: 1px solid ${ColorPalette.lightGray};
+    display: flex;
+    padding: 0 1rem;
+    gap: 1rem;
+  }
+  .logout {
+    padding: 10px;
+    :hover {
+      background-color: ${ColorPalette.lightGray};
+    }
+  }
+`;
+
 function NavBar() {
   const [{ userData }]: AppDataContext = useContext(AppContext);
   return (
@@ -78,19 +102,22 @@ function NavBar() {
       </Link>
       <AbsoluteUserThumb className="grow">
         {userData?.username && (
-          <>
-            <div className="user-thumb-info">
-              <p>Logged in as:</p>
-              <Link href={`/users/${userData.id}`} passHref>
-                <HoverLink>{userData.username}</HoverLink>
-              </Link>
-            </div>
+          <UserLinkContainer>
             <Link href={`/users/${userData.id}`} passHref>
-              <a>
+              <a className="user-link">
+                <div className="user-thumb-info">
+                  <p>Logged in as:</p>
+                  <HoverLink>{userData.username}</HoverLink>
+                </div>
                 <CircularAvatar imageURL={userData.avatarURL} />
               </a>
             </Link>
-          </>
+            <Link href="/auth/logout" passHref>
+              <a className="logout">
+                <FontAwesomeIcon icon={faDoorOpen} />
+              </a>
+            </Link>
+          </UserLinkContainer>
         )}
       </AbsoluteUserThumb>
     </NavContainer>

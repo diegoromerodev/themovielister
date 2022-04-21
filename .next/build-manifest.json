@@ -35,6 +35,11 @@
       "static/chunks/main.js",
       "server/middleware-runtime.js",
       "server/pages/_middleware.js"
+    ],
+    "/auth/logout": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/auth/logout.js"
     ]
   },
   "ampFirstPages": []
