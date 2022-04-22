@@ -54,6 +54,10 @@ function SecondaryNav() {
           <Link href="/auth/login" passHref>
             Login
           </Link>
+          <p>|</p>
+          <Link href="/about" passHref>
+            About
+          </Link>
         </>
       )}
     </LighterNavContainer>

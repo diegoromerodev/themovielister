@@ -9,9 +9,20 @@ export const StyledTextInput = styled.input`
   color: ${ColorPalette.light};
   outline: none;
   font-size: 1.2rem;
+  &.invalid {
+    border-color: ${ColorPalette.error};
+    background-color: ${ColorPalette.error}57;
+  }
   ::placeholder {
     color: ${ColorPalette.lightGray};
   }
+`;
+
+export const ErrorMessage = styled.small`
+  font-weight: 700;
+  color: ${ColorPalette.error};
+  text-align: left;
+  padding-left: 2rem;
 `;
 
 export const PostBodyArea = styled.textarea`
