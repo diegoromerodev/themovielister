@@ -36,6 +36,11 @@
       "server/middleware-runtime.js",
       "server/pages/_middleware.js"
     ],
+    "/auth/login": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/auth/login.js"
+    ],
     "/auth/signup": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
