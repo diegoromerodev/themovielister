@@ -13,6 +13,7 @@ export const SectionContainer = styled.section`
   border: 1px solid ${ColorPalette.gray};
   max-width: 1200px;
   margin: 1rem auto;
+  position: relative;
 `;
 
 export const SectionHeader = styled.h2`
@@ -22,6 +23,7 @@ export const SectionHeader = styled.h2`
   padding: 0.5rem;
   text-align: center;
   text-transform: uppercase;
+  flex: 1;
 `;
 
 export const PostItem = styled.div`

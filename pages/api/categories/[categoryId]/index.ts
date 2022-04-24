@@ -1,8 +1,18 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import Category from "../../../../schemas/category";
+import Movie from "../../../../schemas/movie";
+import Post from "../../../../schemas/post";
+import User from "../../../../schemas/user";
 
 const getCategory = async (categoryId: number) => {
-  const category = await Category.findByPk(categoryId);
+  const category = await Category.findByPk(categoryId, {
+    include: [
+      {
+        model: Post,
+        include: [User, Movie],
+      },
+    ],
+  });
   return category;
 };
 

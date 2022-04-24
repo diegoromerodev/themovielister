@@ -2,9 +2,7 @@
   "/_app": "pages/_app.js",
   "/_document": "pages/_document.js",
   "/_error": "pages/_error.js",
-  "/api/auth/verify": "pages/api/auth/verify.js",
-  "/api/users": "pages/api/users.js",
-  "/api/auth": "pages/api/auth.js",
-  "/": "pages/index.js",
-  "/api/categories": "pages/api/categories.js"
+  "/categories/[categoryId]": "pages/categories/[categoryId].js",
+  "/api/categories/[categoryId]": "pages/api/categories/[categoryId].js",
+  "/api/auth/verify": "pages/api/auth/verify.js"
 }

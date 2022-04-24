@@ -29,6 +29,8 @@ module.exports = {
       },
     ],
     "no-debugger": 0,
+    "no-shadow": "off",
+    "@typescript-eslint/no-shadow": ["error"],
     "react/react-in-jsx-scope": 0,
     "react/jsx-filename-extension": [
       1,

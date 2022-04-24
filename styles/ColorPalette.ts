@@ -5,6 +5,7 @@ const ColorPalette = Object.freeze({
   lightGray: "#888888",
   light: "#fafafa",
   error: "#e63946",
+  info: "#0096c7",
 });
 
 export default ColorPalette;

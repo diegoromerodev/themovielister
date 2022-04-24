@@ -5,14 +5,9 @@ export const serverAxios = axios.create({
 });
 
 const configureAxiosInterceptors = () => {
-  serverAxios.interceptors.request.use(
-    (req) => {
-      return req;
-    },
-    (err) => {
-      throw new Error(err);
-    }
-  );
+  serverAxios.interceptors.request.use((req) => {
+    return req;
+  });
 };
 
 export default configureAxiosInterceptors;
