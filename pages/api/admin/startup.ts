@@ -31,9 +31,9 @@ const startupHandler = async (req: NextApiRequest, res: NextApiResponse) => {
       bio: "A tall, solidly-built, fair skinned man with a triangular face. He has a distinctive walk, has straight, black hair, and has tattoos fully covering his face, left leg, hands and neck.",
       role: "admin",
     });
-    return res.status(200).send("SUCCESS");
+    return res.status(200).json({ status: "Successfully started." });
   } catch (e) {
-    return res.status(500).send("FAILED");
+    return res.status(500).json({ error: "Startup failed." });
   }
 };
 

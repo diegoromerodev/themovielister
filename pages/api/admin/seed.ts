@@ -71,12 +71,12 @@ const seedHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   switch (req.method) {
     case "POST":
       if (user.role !== "admin")
-        return res.status(403).json("NOT ENOUGH PRIVILEGES");
+        return res.status(403).json({ error: "Request forbidden." });
       await executeSeed();
       break;
     default:
-      return res.status(400).json("NO SUCH ENDPOINT");
+      return res.status(400).json({ error: "No such endpoint." });
   }
-  return res.json("SUCCESS");
+  return res.json({ status: "Successfully seeded." });
 };
 export default seedHandler;

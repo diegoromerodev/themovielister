@@ -29,6 +29,8 @@ const moviesHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     default:
       movieData = await Movie.findAll();
   }
+  if (!movieData)
+    return res.status(400).json({ error: "Invalid movie request." });
   return res.json(movieData);
 };
 

@@ -9,9 +9,9 @@ const movieHandler = async (req: NextApiRequest, res: NextApiResponse) => {
       movieData = await Movie.findByPk(movieId.toString());
       break;
     default:
-      return res.status(400).json("NO SUCH ENDPOINT");
+      return res.status(400).json({ error: "No such endpoint." });
   }
-  if (!movieData) return res.status(404).json("NO MOVIE FOUND");
+  if (!movieData) return res.status(404).json({ error: "Movie not found." });
   return res.status(200).json(movieData);
 };
 

@@ -24,9 +24,9 @@ const categoryHandler = async (req: NextApiRequest, res: NextApiResponse) => {
       catData = await getCategory(Number(categoryId));
       break;
     default:
-      return res.status(400).json("NO SUCH ENDPOINT");
+      return res.status(400).json({ error: "No such endpoint." });
   }
-  if (!catData) return res.status(404).json("CATEGORY NOT FOUND");
+  if (!catData) return res.status(404).json({ error: "Category not found." });
   return res.json(catData);
 };
 

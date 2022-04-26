@@ -37,7 +37,10 @@ const postsHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     switch (req.method) {
       case "POST":
-        if (!user) return res.status(401).json("UNAUTHORIZED");
+        if (!user)
+          return res
+            .status(401)
+            .json({ error: "Please log in before doing this." });
         postData = await newPost(req.body, user);
         break;
       default:
@@ -45,7 +48,10 @@ const postsHandler = async (req: NextApiRequest, res: NextApiResponse) => {
         break;
     }
   } catch (err) {
-    return res.status(400).send({ error: err });
+    return res.status(400).send({ error: "Invalid request." });
+  }
+  if (!postData) {
+    return res.status(400).send({ error: "Invalid posts request." });
   }
   return res.json(postData);
 };

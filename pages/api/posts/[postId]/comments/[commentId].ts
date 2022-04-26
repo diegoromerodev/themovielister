@@ -74,7 +74,7 @@ const commentsFinder = async (req: NextApiRequest, res: NextApiResponse) => {
       }
   }
   if (!comment) {
-    return res.status(404).json("COMMENT NOT FOUND");
+    return res.status(404).json({ error: "Comment not found." });
   }
   return res.json(comment);
 };

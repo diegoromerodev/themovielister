@@ -61,7 +61,7 @@ const postCommentsHandler = async (
       commentData = await getPostComments(postId);
   }
   if (!commentData) {
-    return res.status(400).json("INVALID REQUEST");
+    return res.status(400).json({ error: "Invalid comment request" });
   }
   return res.json(commentData);
 };

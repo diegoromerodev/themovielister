@@ -24,7 +24,7 @@ const categoriesHandler = async (req: NextApiRequest, res: NextApiResponse) => {
         });
     }
   } catch (err) {
-    return res.status(400).send("Invalid request");
+    return res.status(400).json({ error: "Something went wrong..." });
   }
   return res.json(catData);
 };

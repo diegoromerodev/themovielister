@@ -6,8 +6,9 @@ const verifyToken = async (req: NextApiRequest, res: NextApiResponse) => {
   let user;
   try {
     user = await tokenMiddleware(req);
-  } catch {
+  } catch (error) {
     user = false;
+    return res.json({ error });
   }
   return res.json(user);
 };

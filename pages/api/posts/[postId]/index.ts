@@ -74,10 +74,11 @@ const postFinder = async (req: NextApiRequest, res: NextApiResponse) => {
       }
       break;
     default:
-      return res.status(400).json("NO SUCH ENDPOINT");
+      return res.status(400).json({ error: "No such endpoint." });
   }
 
-  if (!postData) return res.status(404).json("POST NOT FOUND");
+  if (!postData)
+    return res.status(404).json({ error: "Invalid post request." });
 
   return res.json(postData);
 };
