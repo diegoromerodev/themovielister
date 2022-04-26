@@ -2,5 +2,7 @@
   "/_app": "pages/_app.js",
   "/_document": "pages/_document.js",
   "/_error": "pages/_error.js",
-  "/api/categories/[categoryId]": "pages/api/categories/[categoryId].js"
+  "/": "pages/index.js",
+  "/api/auth/verify": "pages/api/auth/verify.js",
+  "/api/categories": "pages/api/categories.js"
 }

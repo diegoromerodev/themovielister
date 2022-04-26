@@ -23,7 +23,7 @@ function App({ Component, pageProps }: ExtendedAppProps) {
   const appDataHooks = useState<AppDataState>({
     userData: null,
     token: null,
-    currentErrors: [],
+    currentErrors: ["Make sure to fix your shit bruh", "Invalid credentials"],
   });
   const [appData, setAppData]: AppDataContext = appDataHooks;
   const { userData } = useLogin(appData.token);

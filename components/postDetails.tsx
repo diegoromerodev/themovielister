@@ -117,6 +117,7 @@ export function CommentCreator({
   handleSubmit: (e: FormEvent<HTMLFormElement>, body: string) => void;
 }) {
   const [commentText, setCommentText] = useState("");
+  if (!user) return null;
   return (
     <CommentCreationContainer onSubmit={(e) => handleSubmit(e, commentText)}>
       <CommentTextBox
