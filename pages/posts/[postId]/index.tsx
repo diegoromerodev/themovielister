@@ -18,6 +18,7 @@ import {
 import AppContext from "../../../lib/AppContext";
 import { customAxios } from "../../../lib/hooks/useAxiosInterceptor";
 import { serverAxios } from "../../../lib/serverside/serverAxiosInterceptors";
+import { NoMediaSign } from "../../../components/typography";
 
 function MovieDetails({
   postData,
@@ -76,6 +77,12 @@ function MovieDetails({
           </MovieDetailsContainer>
         </PostDetailsContainer>
       </SectionContainer>
+      {!localComments.length && (
+        <NoMediaSign
+          headerText="No comments yet"
+          secondaryText="Tell us what you think about this post!"
+        />
+      )}
       {localComments.map((com) => (
         <SectionContainer
           key={`postcomment${postData.id}${com.id}${com.User.id}`}

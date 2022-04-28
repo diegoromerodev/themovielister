@@ -6,11 +6,13 @@ import {
   SectionContainer,
   SectionHeader,
 } from "../../../components/tabloids";
-import { SecondaryParagraph } from "../../../components/typography";
+import {
+  NoMediaSign,
+  SecondaryParagraph,
+} from "../../../components/typography";
 import { serverAxios } from "../../../lib/serverside/serverAxiosInterceptors";
 import { UserSchema } from "../../../lib/types";
 import { calculateAge } from "../../../lib/utils";
-import ColorPalette from "../../../styles/ColorPalette";
 
 const UserDetailsAvatarContainer = styled.div`
   width: 7rem;
@@ -27,25 +29,6 @@ const UserDetailsInfoContainer = styled.div`
   display: flex;
   padding: 1rem;
   gap: 1rem;
-`;
-
-const NoPostsSign = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  padding-bottom: 1rem;
-  h3 {
-    font-size: 4rem;
-    color: ${ColorPalette.gray};
-    font-weight: 750;
-  }
-  h5 {
-    font-weight: 600;
-    color: ${ColorPalette.dark};
-    font-size: 2rem;
-  }
 `;
 
 function UserDetailsHandler({ userData }: { userData: UserSchema }) {
@@ -78,10 +61,10 @@ function UserDetailsHandler({ userData }: { userData: UserSchema }) {
           <PostPreviewDetails post={post} />
         ))}
         {!userData.Posts.length && (
-          <NoPostsSign>
-            <h3>No posts yet</h3>
-            <h5>Tell them to start posting!</h5>
-          </NoPostsSign>
+          <NoMediaSign
+            headerText="No posts yet."
+            secondaryText="Tell them to start posting!"
+          />
         )}
       </SectionContainer>
     </>

@@ -6,6 +6,7 @@ import { UserSchema } from "../lib/types";
 import { calculateAge } from "../lib/utils";
 import ColorPalette from "../styles/ColorPalette";
 import { HoverLink } from "./tabloids";
+import { PrimaryThinHeader, SecondaryParagraph } from "./typography";
 import { UserDetailsContainer, UserRole } from "./userDetails";
 
 export const PostDetailsContainer = styled.article`
@@ -48,6 +49,7 @@ export const CommentCreationContainer = styled.form`
   align-items: flex-end;
   padding: 1rem;
   gap: 0.5rem;
+  position: relative;
   .under-comment-info {
     display: flex;
     justify-content: space-between;
@@ -109,6 +111,18 @@ export function UserInfoPostHeader({
   );
 }
 
+const UnauthenticatedComment = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: ${ColorPalette.gray}aa;
+  top: 0;
+  left: 0;
+  display: grid;
+  place-items: center;
+  backdrop-filter: blur(5px);
+`;
+
 export function CommentCreator({
   user,
   handleSubmit,
@@ -120,6 +134,13 @@ export function CommentCreator({
   if (!user) return null;
   return (
     <CommentCreationContainer onSubmit={(e) => handleSubmit(e, commentText)}>
+      {!user?.username && (
+        <UnauthenticatedComment>
+          <Link href="/auth/login" passHref>
+            <HoverLink>Log in to post a comment</HoverLink>
+          </Link>
+        </UnauthenticatedComment>
+      )}
       <CommentTextBox
         value={commentText}
         onChange={({ target: { value } }) => setCommentText(value)}
@@ -127,7 +148,10 @@ export function CommentCreator({
       />
       <div className="under-comment-info">
         <p>
-          Logged in as: <span className="username-logged">{user.username}</span>
+          Logged in as:{" "}
+          <span className="username-logged">
+            {user?.username || "Joe Smith"}
+          </span>
         </p>
         <SubmitButton type="submit">Submit reply</SubmitButton>
       </div>
