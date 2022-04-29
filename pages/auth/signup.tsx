@@ -1,41 +1,39 @@
 /* eslint-disable no-restricted-syntax */
 import { useRouter } from "next/router";
 import { FormEvent, useContext, useEffect, useState } from "react";
-import {
-  ErrorMessage,
-  FormContainer,
-  StyledTextInput,
-} from "../../components/forms";
+import { FormContainer, InputWithErrors } from "../../components/forms";
 import { SubmitButton } from "../../components/postDetails";
 import { SectionContainer, SectionHeader } from "../../components/tabloids";
 import AppContext from "../../lib/AppContext";
 import { customAxios } from "../../lib/hooks/useAxiosInterceptor";
 import { AppDataContext, UserSchema } from "../../lib/types";
 
-interface FieldErrors {
+export interface DynamicFieldsObj {
   [index: string]: string;
 }
 
 function SignupPage() {
   const router = useRouter();
   const [, setAppData]: AppDataContext = useContext(AppContext);
-  const [fieldsWithErrors, setFieldsWithErrors] = useState<FieldErrors>({
-    username: null,
-    password: null,
-    passwordConfirm: null,
+  const [fieldsWithErrors, setFieldsWithErrors] = useState<DynamicFieldsObj>(
+    {}
+  );
+
+  const [fieldData, setFieldData] = useState<DynamicFieldsObj>({
+    username: "",
+    bio: "",
+    avatarURL: "",
+    email: "",
+    firstName: "",
+    lastName: "",
+    password: "",
+    passwordConfirm: "",
   });
-  const [username, setUsername] = useState("");
-  const [bio, setBio] = useState("");
-  const [avatarURL, setAvatarURL] = useState("");
-  const [email, setEmail] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [password, setPassword] = useState("");
-  const [passwordConfirm, setPasswordConfirm] = useState("");
 
   const checkEqualPasswords = () => {
     let passwordError;
-    if (password !== passwordConfirm) passwordError = "Passwords must match.";
+    if (fieldData.password !== fieldData.passwordConfirm)
+      passwordError = "Passwords must match.";
 
     setFieldsWithErrors((prevErrors) => ({
       ...prevErrors,
@@ -43,26 +41,39 @@ function SignupPage() {
     }));
   };
 
-  useEffect(checkEqualPasswords, [password, passwordConfirm]);
+  const validateRequiredFields = (fields: DynamicFieldsObj): boolean => {
+    let allGood = true;
+    const badFields: DynamicFieldsObj = {};
+    Object.keys(fields).forEach((k) => {
+      if (!fields[k]) {
+        badFields[k] = `${k[0].toUpperCase() + k.slice(1)} is required.`;
+        allGood = false;
+      }
+    });
+    if (!allGood) {
+      setFieldsWithErrors((prevFields) => ({
+        ...prevFields,
+        ...badFields,
+      }));
+    }
+    return allGood;
+  };
+
+  useEffect(checkEqualPasswords, [
+    fieldData.password,
+    fieldData.passwordConfirm,
+  ]);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    for (const errorVal of Object.values(fieldsWithErrors)) {
-      if (errorVal) return;
+    if (!validateRequiredFields(fieldData)) {
+      return;
     }
-    const createdUserRes = await customAxios.post("/api/users", {
-      username,
-      bio,
-      avatarURL,
-      email,
-      firstName,
-      lastName,
-      password,
-    });
+    const createdUserRes = await customAxios.post("/api/users", fieldData);
     if (createdUserRes?.data) {
       const loginRes = await customAxios.post("/api/auth", {
-        username,
-        password,
+        username: fieldData.username,
+        password: fieldData.password,
       });
       const token: string = loginRes.data.toString();
       const userData: UserSchema = createdUserRes.data;
@@ -76,56 +87,13 @@ function SignupPage() {
     <SectionContainer>
       <SectionHeader>Create account</SectionHeader>
       <FormContainer onSubmit={handleSubmit}>
-        <StyledTextInput
-          name="username"
-          type="text"
-          placeholder="Create a username"
-          onChange={({ target: { value } }) => setUsername(value)}
-        />
-        <StyledTextInput
-          name="avatar"
-          type="text"
-          placeholder="Enter an avatar image url"
-          onChange={({ target: { value } }) => setAvatarURL(value)}
-        />
-        <StyledTextInput
-          name="email"
-          type="email"
-          placeholder="Enter your email"
-          onChange={({ target: { value } }) => setEmail(value)}
-        />
-        <StyledTextInput
-          name="first-name"
-          type="text"
-          placeholder="Enter your first name"
-          onChange={({ target: { value } }) => setFirstName(value)}
-        />
-        <StyledTextInput
-          name="last-name"
-          type="text"
-          placeholder="Enter your last name"
-          onChange={({ target: { value } }) => setLastName(value)}
-        />
-        <StyledTextInput
-          name="bio"
-          type="text"
-          placeholder="Describe yourself in a few words"
-          onChange={({ target: { value } }) => setBio(value)}
-        />
-        <StyledTextInput
-          name="password"
-          type="password"
-          placeholder="Create a password"
-          onChange={({ target: { value } }) => setPassword(value)}
-        />
-        <StyledTextInput
-          name="passwordConfirm"
-          type="password"
-          placeholder="Confirm your password"
-          onChange={({ target: { value } }) => setPasswordConfirm(value)}
-          className={fieldsWithErrors.passwordConfirm ? "invalid" : ""}
-        />
-        <ErrorMessage>{fieldsWithErrors.passwordConfirm}</ErrorMessage>
+        {Object.keys(fieldData).map((field) => (
+          <InputWithErrors
+            name={field}
+            changeHandler={setFieldData}
+            error={fieldsWithErrors[field]}
+          />
+        ))}
         <SubmitButton type="submit">Sign Up</SubmitButton>
       </FormContainer>
     </SectionContainer>

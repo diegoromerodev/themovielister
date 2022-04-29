@@ -1,4 +1,6 @@
+import { SetStateAction } from "react";
 import styled from "styled-components";
+import { DynamicFieldsObj } from "../pages/auth/signup";
 import ColorPalette from "../styles/ColorPalette";
 
 export const StyledTextInput = styled.input`
@@ -35,3 +37,42 @@ export const FormContainer = styled.form`
   gap: 1rem;
   text-align: center;
 `;
+
+interface InputWithErrorsProps {
+  name: string;
+  error?: string;
+  changeHandler: (value: SetStateAction<DynamicFieldsObj>) => void;
+}
+
+export function InputWithErrors({
+  name,
+  error,
+  changeHandler,
+}: InputWithErrorsProps): JSX.Element {
+  const inputTypes = {
+    email: "email",
+    password: "password",
+    passwordConfirm: "password",
+  };
+
+  return (
+    <>
+      <StyledTextInput
+        name={name}
+        type={inputTypes[name] || "text"}
+        placeholder={`Enter your ${name}`}
+        onChange={({ target: { value } }) =>
+          changeHandler((prevState) => ({
+            ...prevState,
+            name: value,
+          }))
+        }
+      />
+      {error && <ErrorMessage>{error}</ErrorMessage>}
+    </>
+  );
+}
+
+InputWithErrors.defaultProps = {
+  error: "",
+};
