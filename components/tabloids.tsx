@@ -96,7 +96,13 @@ export const UserThumb = styled.div`
 
 export const HoverLink = styled.a`
   &:hover {
-    color: gold;
+    color: ${ColorPalette.warning};
+  }
+`;
+
+export const HoverableContainer = styled.a`
+  &:hover > * {
+    color: ${ColorPalette.warning};
   }
 `;
 

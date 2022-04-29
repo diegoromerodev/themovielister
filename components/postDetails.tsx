@@ -1,3 +1,5 @@
+import { faLock } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import Link from "next/link";
 import { FormEvent, useState } from "react";
@@ -5,8 +7,7 @@ import styled from "styled-components";
 import { UserSchema } from "../lib/types";
 import { calculateAge } from "../lib/utils";
 import ColorPalette from "../styles/ColorPalette";
-import { HoverLink } from "./tabloids";
-import { PrimaryThinHeader, SecondaryParagraph } from "./typography";
+import { HoverableContainer, HoverLink } from "./tabloids";
 import { UserDetailsContainer, UserRole } from "./userDetails";
 
 export const PostDetailsContainer = styled.article`
@@ -137,7 +138,10 @@ export function CommentCreator({
       {!user?.username && (
         <UnauthenticatedComment>
           <Link href="/auth/login" passHref>
-            <HoverLink>Log in to post a comment</HoverLink>
+            <HoverableContainer>
+              <FontAwesomeIcon icon={faLock} color={ColorPalette.light} />{" "}
+              <span>Log in to post a comment</span>
+            </HoverableContainer>
           </Link>
         </UnauthenticatedComment>
       )}

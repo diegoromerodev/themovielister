@@ -1,5 +1,15 @@
+type ColorTypeKeys =
+  | "darker"
+  | "dark"
+  | "gray"
+  | "lightGray"
+  | "light"
+  | "error"
+  | "info"
+  | "warning";
+
 type ColorTypes = {
-  [index: string]: string;
+  [index in ColorTypeKeys]: string;
 };
 
 const ColorPalette: ColorTypes = Object.freeze({
@@ -10,6 +20,7 @@ const ColorPalette: ColorTypes = Object.freeze({
   light: "#fafafa",
   error: "#e63946",
   info: "#0096c7",
+  warning: "#ffba08",
 });
 
 export default ColorPalette;
