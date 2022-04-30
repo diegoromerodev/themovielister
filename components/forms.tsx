@@ -1,6 +1,6 @@
 import { SetStateAction } from "react";
 import styled from "styled-components";
-import { DynamicFieldsObj } from "../pages/auth/signup";
+import { DynamicFieldsData } from "../pages/auth/signup";
 import ColorPalette from "../styles/ColorPalette";
 
 export const StyledTextInput = styled.input`
@@ -41,12 +41,14 @@ export const FormContainer = styled.form`
 interface InputWithErrorsProps {
   name: string;
   error?: string;
-  changeHandler: (value: SetStateAction<DynamicFieldsObj>) => void;
+  placeholder: string;
+  changeHandler: (value: SetStateAction<DynamicFieldsData>) => void;
 }
 
 export function InputWithErrors({
   name,
   error,
+  placeholder,
   changeHandler,
 }: InputWithErrorsProps): JSX.Element {
   const inputTypes = {
@@ -60,12 +62,16 @@ export function InputWithErrors({
       <StyledTextInput
         name={name}
         type={inputTypes[name] || "text"}
-        placeholder={`Enter your ${name}`}
+        placeholder={placeholder}
         onChange={({ target: { value } }) =>
-          changeHandler((prevState) => ({
-            ...prevState,
-            name: value,
-          }))
+          changeHandler((prevState) => {
+            const newState = { ...prevState };
+            newState[name].value = value;
+            if (value && newState[name].error) {
+              newState[name].error = "";
+            }
+            return newState;
+          })
         }
       />
       {error && <ErrorMessage>{error}</ErrorMessage>}

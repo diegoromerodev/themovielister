@@ -8,26 +8,27 @@ import AppContext from "../../lib/AppContext";
 import { customAxios } from "../../lib/hooks/useAxiosInterceptor";
 import { AppDataContext, UserSchema } from "../../lib/types";
 
-export interface DynamicFieldsObj {
-  [index: string]: string;
+export interface DynamicFieldsData {
+  [index: string]: { value: string; placeholder: string; error: string };
 }
 
 function SignupPage() {
   const router = useRouter();
   const [, setAppData]: AppDataContext = useContext(AppContext);
-  const [fieldsWithErrors, setFieldsWithErrors] = useState<DynamicFieldsObj>(
-    {}
-  );
 
-  const [fieldData, setFieldData] = useState<DynamicFieldsObj>({
-    username: "",
-    bio: "",
-    avatarURL: "",
-    email: "",
-    firstName: "",
-    lastName: "",
-    password: "",
-    passwordConfirm: "",
+  const [fieldData, setFieldData] = useState<DynamicFieldsData>({
+    username: { value: "", placeholder: "Choose a username", error: "" },
+    bio: { value: "", placeholder: "Introduce yourself", error: "" },
+    avatarURL: { value: "", placeholder: "Enter an image url", error: "" },
+    email: { value: "", placeholder: "Enter your email", error: "" },
+    firstName: { value: "", placeholder: "Enter your first name", error: "" },
+    lastName: { value: "", placeholder: "Type your last name", error: "" },
+    password: { value: "", placeholder: "Choose a password", error: "" },
+    passwordConfirm: {
+      value: "",
+      placeholder: "Confirm your password",
+      error: "",
+    },
   });
 
   const checkEqualPasswords = () => {
@@ -35,23 +36,24 @@ function SignupPage() {
     if (fieldData.password !== fieldData.passwordConfirm)
       passwordError = "Passwords must match.";
 
-    setFieldsWithErrors((prevErrors) => ({
-      ...prevErrors,
-      passwordConfirm: passwordError,
-    }));
+    setFieldData((prevFieldData) => {
+      const newFieldData = { ...prevFieldData };
+      newFieldData.passwordConfirm.error = passwordError;
+      return newFieldData;
+    });
   };
 
-  const validateRequiredFields = (fields: DynamicFieldsObj): boolean => {
+  const validateRequiredFields = (fields: DynamicFieldsData): boolean => {
     let allGood = true;
-    const badFields: DynamicFieldsObj = {};
+    const badFields: DynamicFieldsData = { ...fields };
     Object.keys(fields).forEach((k) => {
-      if (!fields[k]) {
-        badFields[k] = `${k[0].toUpperCase() + k.slice(1)} is required.`;
+      if (!fields[k].value) {
+        badFields[k].error = `${k[0].toUpperCase() + k.slice(1)} is required.`;
         allGood = false;
       }
     });
     if (!allGood) {
-      setFieldsWithErrors((prevFields) => ({
+      setFieldData((prevFields) => ({
         ...prevFields,
         ...badFields,
       }));
@@ -91,7 +93,8 @@ function SignupPage() {
           <InputWithErrors
             name={field}
             changeHandler={setFieldData}
-            error={fieldsWithErrors[field]}
+            error={fieldData[field].error}
+            placeholder={fieldData[field].placeholder}
           />
         ))}
         <SubmitButton type="submit">Sign Up</SubmitButton>
