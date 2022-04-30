@@ -42,6 +42,7 @@ interface InputWithErrorsProps {
   name: string;
   error?: string;
   placeholder: string;
+  type: string;
   changeHandler: (value: SetStateAction<DynamicFieldsData>) => void;
 }
 
@@ -49,19 +50,14 @@ export function InputWithErrors({
   name,
   error,
   placeholder,
+  type,
   changeHandler,
 }: InputWithErrorsProps): JSX.Element {
-  const inputTypes = {
-    email: "email",
-    password: "password",
-    passwordConfirm: "password",
-  };
-
   return (
     <>
       <StyledTextInput
         name={name}
-        type={inputTypes[name] || "text"}
+        type={type}
         placeholder={placeholder}
         onChange={({ target: { value } }) =>
           changeHandler((prevState) => {

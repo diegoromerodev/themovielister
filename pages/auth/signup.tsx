@@ -7,9 +7,16 @@ import { SectionContainer, SectionHeader } from "../../components/tabloids";
 import AppContext from "../../lib/AppContext";
 import { customAxios } from "../../lib/hooks/useAxiosInterceptor";
 import { AppDataContext, UserSchema } from "../../lib/types";
+import { camelCaseToCapitalize } from "../../lib/utils";
 
 export interface DynamicFieldsData {
-  [index: string]: { value: string; placeholder: string; error: string };
+  [index: string]: {
+    value: string;
+    placeholder: string;
+    error: string;
+    name: string;
+    type: string;
+  };
 }
 
 function SignupPage() {
@@ -17,17 +24,61 @@ function SignupPage() {
   const [, setAppData]: AppDataContext = useContext(AppContext);
 
   const [fieldData, setFieldData] = useState<DynamicFieldsData>({
-    username: { value: "", placeholder: "Choose a username", error: "" },
-    bio: { value: "", placeholder: "Introduce yourself", error: "" },
-    avatarURL: { value: "", placeholder: "Enter an image url", error: "" },
-    email: { value: "", placeholder: "Enter your email", error: "" },
-    firstName: { value: "", placeholder: "Enter your first name", error: "" },
-    lastName: { value: "", placeholder: "Type your last name", error: "" },
-    password: { value: "", placeholder: "Choose a password", error: "" },
+    username: {
+      value: "",
+      placeholder: "Choose a username",
+      error: "",
+      name: "Username",
+      type: "text",
+    },
+    bio: {
+      value: "",
+      placeholder: "Introduce yourself",
+      error: "",
+      name: "Bio",
+      type: "text",
+    },
+    avatarURL: {
+      value: "",
+      placeholder: "Enter an image url",
+      error: "",
+      name: "Avatar URL",
+      type: "text",
+    },
+    email: {
+      value: "",
+      placeholder: "Enter your email",
+      error: "",
+      name: "E-mail",
+      type: "email",
+    },
+    firstName: {
+      value: "",
+      placeholder: "Enter your first name",
+      error: "",
+      name: "First name",
+      type: "text",
+    },
+    lastName: {
+      value: "",
+      placeholder: "Type your last name",
+      error: "",
+      name: "Last name",
+      type: "text",
+    },
+    password: {
+      value: "",
+      placeholder: "Choose a password",
+      error: "",
+      name: "Password",
+      type: "password",
+    },
     passwordConfirm: {
       value: "",
       placeholder: "Confirm your password",
       error: "",
+      name: "Password confirmation",
+      type: "password",
     },
   });
 
@@ -48,7 +99,7 @@ function SignupPage() {
     const badFields: DynamicFieldsData = { ...fields };
     Object.keys(fields).forEach((k) => {
       if (!fields[k].value) {
-        badFields[k].error = `${k[0].toUpperCase() + k.slice(1)} is required.`;
+        badFields[k].error = `${fields[k].name} is required.`;
         allGood = false;
       }
     });
@@ -89,12 +140,13 @@ function SignupPage() {
     <SectionContainer>
       <SectionHeader>Create account</SectionHeader>
       <FormContainer onSubmit={handleSubmit}>
-        {Object.keys(fieldData).map((field) => (
+        {Object.values(fieldData).map((field) => (
           <InputWithErrors
-            name={field}
+            name={field.name}
+            type={field.type}
             changeHandler={setFieldData}
-            error={fieldData[field].error}
-            placeholder={fieldData[field].placeholder}
+            error={field.error}
+            placeholder={field.placeholder}
           />
         ))}
         <SubmitButton type="submit">Sign Up</SubmitButton>
