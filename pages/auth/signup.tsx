@@ -7,7 +7,6 @@ import { SectionContainer, SectionHeader } from "../../components/tabloids";
 import AppContext from "../../lib/AppContext";
 import { customAxios } from "../../lib/hooks/useAxiosInterceptor";
 import { AppDataContext, UserSchema } from "../../lib/types";
-import { camelCaseToCapitalize } from "../../lib/utils";
 
 export interface DynamicFieldsData {
   [index: string]: {

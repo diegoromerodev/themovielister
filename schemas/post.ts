@@ -17,10 +17,17 @@ const Post = PostModel.init(
     title: {
       type: DataTypes.STRING,
       allowNull: false,
+      validate: {
+        min: 10,
+        max: 100,
+      },
     },
     body: {
       type: DataTypes.TEXT,
       allowNull: false,
+      validate: {
+        min: 20,
+      },
     },
   },
   {

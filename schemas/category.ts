@@ -18,7 +18,7 @@ class CategoryModel extends Model {
 
 const Category = CategoryModel.init(
   {
-    name: DataTypes.STRING,
+    name: { type: DataTypes.STRING, allowNull: false },
   },
   {
     sequelize: pgSequelize,

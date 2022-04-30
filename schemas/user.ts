@@ -15,19 +15,33 @@ const User = UserModel.init(
       type: DataTypes.STRING,
       unique: true,
       allowNull: false,
+      validate: {
+        max: 20,
+        min: 3,
+      },
     },
     avatarURL: {
       type: DataTypes.STRING,
       allowNull: false,
+      validate: {
+        isUrl: true,
+      },
     },
     bio: {
       type: DataTypes.STRING,
       allowNull: false,
+      validate: {
+        min: 20,
+        max: 100,
+      },
     },
     email: {
       type: DataTypes.STRING,
       unique: true,
       allowNull: false,
+      validate: {
+        isEmail: true,
+      },
     },
     firstName: {
       type: DataTypes.STRING,

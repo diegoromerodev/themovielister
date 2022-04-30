@@ -13,7 +13,10 @@ class CommentModel extends Model {
 
 const Comment = CommentModel.init(
   {
-    body: DataTypes.STRING,
+    body: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
   },
   {
     sequelize: pgSequelize,
