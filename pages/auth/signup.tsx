@@ -116,6 +116,8 @@ function SignupPage() {
     fieldData.passwordConfirm,
   ]);
 
+  const handleInputChange = (name: string, value: string): void => {};
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!validateRequiredFields(fieldData)) {
@@ -139,13 +141,15 @@ function SignupPage() {
     <SectionContainer>
       <SectionHeader>Create account</SectionHeader>
       <FormContainer onSubmit={handleSubmit}>
-        {Object.values(fieldData).map((field) => (
+        {Object.keys(fieldData).map((field) => (
           <InputWithErrors
-            name={field.name}
-            type={field.type}
+            key={fieldData[field].name}
+            serial={field}
+            name={fieldData[field].name}
+            type={fieldData[field].type}
             changeHandler={setFieldData}
-            error={field.error}
-            placeholder={field.placeholder}
+            error={fieldData[field].error}
+            placeholder={fieldData[field].placeholder}
           />
         ))}
         <SubmitButton type="submit">Sign Up</SubmitButton>

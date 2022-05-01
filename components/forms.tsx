@@ -43,6 +43,7 @@ interface InputWithErrorsProps {
   error?: string;
   placeholder: string;
   type: string;
+  serial: string;
   changeHandler: (value: SetStateAction<DynamicFieldsData>) => void;
 }
 
@@ -51,6 +52,7 @@ export function InputWithErrors({
   error,
   placeholder,
   type,
+  serial,
   changeHandler,
 }: InputWithErrorsProps): JSX.Element {
   return (
@@ -62,9 +64,9 @@ export function InputWithErrors({
         onChange={({ target: { value } }) =>
           changeHandler((prevState) => {
             const newState = { ...prevState };
-            newState[name].value = value;
-            if (value && newState[name].error) {
-              newState[name].error = "";
+            newState[serial].value = value;
+            if (value && newState[serial].error) {
+              newState[serial].error = "";
             }
             return newState;
           })
