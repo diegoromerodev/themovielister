@@ -52,7 +52,7 @@ const checkAllErrorValidators = (
   return "";
 };
 
-export const FormFieldConstraints = Object.freeze({
+export const UserFormFieldConstraints = Object.freeze({
   username(value: string, fieldName: string): string {
     const errorValidators: StringFnNoArgs[] = [
       isNotWithinRange.bind(this, 20, 3, value),
@@ -60,7 +60,7 @@ export const FormFieldConstraints = Object.freeze({
     return checkAllErrorValidators(errorValidators, fieldName);
   },
   avatarURL(value: string, fieldName: string): string {
-    const errorValidators: StringFnNoArgs[] = [isValidUrl.bind(value)];
+    const errorValidators: StringFnNoArgs[] = [isValidUrl.bind(this, value)];
     return checkAllErrorValidators(errorValidators, fieldName);
   },
   bio(value: string, fieldName: string): string {
@@ -70,12 +70,12 @@ export const FormFieldConstraints = Object.freeze({
     return checkAllErrorValidators(errorValidators, fieldName);
   },
   email(value: string, fieldName: string): string {
-    const errorValidators: StringFnNoArgs[] = [isValidEmail.bind(value)];
+    const errorValidators: StringFnNoArgs[] = [isValidEmail.bind(this, value)];
     return checkAllErrorValidators(errorValidators, fieldName);
   },
   password(value: string, fieldName: string): string {
     const errorValidators: StringFnNoArgs[] = [
-      passwordConstraints.bind(value),
+      passwordConstraints.bind(this, value),
       isNotWithinRange.bind(this, 100, 8, value),
     ];
     return checkAllErrorValidators(errorValidators, fieldName);

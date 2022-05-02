@@ -1,6 +1,6 @@
-import { SetStateAction } from "react";
+import { faBomb } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styled from "styled-components";
-import { DynamicFieldsData } from "../pages/auth/signup";
 import ColorPalette from "../styles/ColorPalette";
 
 export const StyledTextInput = styled.input`
@@ -24,7 +24,7 @@ export const ErrorMessage = styled.small`
   font-weight: 700;
   color: ${ColorPalette.error};
   text-align: left;
-  padding-left: 2rem;
+  padding-left: 0.5rem;
 `;
 
 export const PostBodyArea = styled.textarea`
@@ -44,7 +44,7 @@ interface InputWithErrorsProps {
   placeholder: string;
   type: string;
   serial: string;
-  changeHandler: (value: SetStateAction<DynamicFieldsData>) => void;
+  changeHandler: (name: string, readableName: string, value: string) => void;
 }
 
 export function InputWithErrors({
@@ -61,18 +61,15 @@ export function InputWithErrors({
         name={name}
         type={type}
         placeholder={placeholder}
-        onChange={({ target: { value } }) =>
-          changeHandler((prevState) => {
-            const newState = { ...prevState };
-            newState[serial].value = value;
-            if (value && newState[serial].error) {
-              newState[serial].error = "";
-            }
-            return newState;
-          })
-        }
+        onChange={({ target: { value } }) => changeHandler(serial, name, value)}
       />
-      {error && <ErrorMessage>{error}</ErrorMessage>}
+      {error && (
+        <ErrorMessage>
+          <FontAwesomeIcon icon={faBomb} />
+          &nbsp;&nbsp;
+          {error}
+        </ErrorMessage>
+      )}
     </>
   );
 }

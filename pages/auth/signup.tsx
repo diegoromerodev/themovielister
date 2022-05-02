@@ -7,6 +7,7 @@ import { SectionContainer, SectionHeader } from "../../components/tabloids";
 import AppContext from "../../lib/AppContext";
 import { customAxios } from "../../lib/hooks/useAxiosInterceptor";
 import { AppDataContext, UserSchema } from "../../lib/types";
+import { UserFormFieldConstraints } from "../../lib/utils";
 
 export interface DynamicFieldsData {
   [index: string]: {
@@ -83,7 +84,7 @@ function SignupPage() {
 
   const checkEqualPasswords = () => {
     let passwordError;
-    if (fieldData.password !== fieldData.passwordConfirm)
+    if (fieldData.password.value !== fieldData.passwordConfirm.value)
       passwordError = "Passwords must match.";
 
     setFieldData((prevFieldData) => {
@@ -96,12 +97,13 @@ function SignupPage() {
   const validateRequiredFields = (fields: DynamicFieldsData): boolean => {
     let allGood = true;
     const badFields: DynamicFieldsData = { ...fields };
-    Object.keys(fields).forEach((k) => {
+    for (const k of Object.keys(fields)) {
+      if (fields[k].error) return false;
       if (!fields[k].value) {
         badFields[k].error = `${fields[k].name} is required.`;
         allGood = false;
       }
-    });
+    }
     if (!allGood) {
       setFieldData((prevFields) => ({
         ...prevFields,
@@ -116,7 +118,21 @@ function SignupPage() {
     fieldData.passwordConfirm,
   ]);
 
-  const handleInputChange = (name: string, value: string): void => {};
+  const handleInputChange = (
+    name: string,
+    readableName: string,
+    value: string
+  ): void => {
+    let error;
+    if (name in UserFormFieldConstraints) {
+      error = UserFormFieldConstraints[name](value, readableName);
+    }
+    setFieldData((prevData) => {
+      const newData = { ...prevData };
+      newData[name] = { ...newData[name], value, error };
+      return newData;
+    });
+  };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -147,7 +163,7 @@ function SignupPage() {
             serial={field}
             name={fieldData[field].name}
             type={fieldData[field].type}
-            changeHandler={setFieldData}
+            changeHandler={handleInputChange}
             error={fieldData[field].error}
             placeholder={fieldData[field].placeholder}
           />

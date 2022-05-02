@@ -3,6 +3,11 @@ import { GetServerSideProps } from "next";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import Link from "next/link";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faComments,
+  faMagnifyingGlassPlus,
+} from "@fortawesome/free-solid-svg-icons";
 import pgSequelize from "../lib/sequelize";
 import {
   PostPreviewDetails,
@@ -15,11 +20,14 @@ import { CenteringPositions, FlexRow } from "../components/containers";
 import ColorPalette from "../styles/ColorPalette";
 
 const SeeMoreLink = styled.a`
-  color: ${ColorPalette.info};
+  color: ${ColorPalette.light};
   font-weight: 700;
   font-size: 0.8rem;
   position: absolute;
   right: 1rem;
+  padding: 0.3rem 0.5rem;
+  background-color: ${ColorPalette.info};
+  border-radius: 4rem;
 `;
 
 function HomePage({ categories }: { categories: CategorySchema[] }) {
@@ -29,9 +37,16 @@ function HomePage({ categories }: { categories: CategorySchema[] }) {
         align={CenteringPositions.Center}
         justify={CenteringPositions.Center}
       >
-        <SectionHeader>{cat.name}</SectionHeader>
+        <SectionHeader>
+          <FontAwesomeIcon icon={faComments} />
+          &nbsp;&nbsp;
+          {cat.name}
+        </SectionHeader>
         <Link href={`/categories/${cat.id}`} passHref>
-          <SeeMoreLink>&gt;&gt;See more of {cat.name}</SeeMoreLink>
+          <SeeMoreLink>
+            <FontAwesomeIcon icon={faMagnifyingGlassPlus} />
+            &nbsp;&nbsp;See more posts
+          </SeeMoreLink>
         </Link>
       </FlexRow>
       {cat.Posts?.slice(0, 4).map((post) => (

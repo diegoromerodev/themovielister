@@ -16,14 +16,19 @@ export const SectionContainer = styled.section`
   position: relative;
 `;
 
-export const SectionHeader = styled.h2`
+type SectionHeaderProps = {
+  color?: string;
+};
+
+export const SectionHeader = styled.h2<SectionHeaderProps>`
   background-color: ${ColorPalette.dark};
   font-size: 1.2rem;
-  font-weight: 400;
+  font-weight: 800;
   padding: 0.5rem;
   text-align: center;
   text-transform: uppercase;
   flex: 1;
+  color: ${({ color }) => color || ColorPalette.light};
 `;
 
 export const PostItem = styled.div`
