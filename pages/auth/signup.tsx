@@ -7,7 +7,11 @@ import { SectionContainer, SectionHeader } from "../../components/tabloids";
 import AppContext from "../../lib/AppContext";
 import { customAxios } from "../../lib/hooks/useAxiosInterceptor";
 import { AppDataContext, UserSchema } from "../../lib/types";
-import { UserFormFieldConstraints } from "../../lib/utils";
+import {
+  handleInputChangeWithErrors,
+  UserFormFieldConstraints,
+  validateRequiredFields,
+} from "../../lib/utils";
 
 export interface DynamicFieldsData {
   [index: string]: {
@@ -94,49 +98,14 @@ function SignupPage() {
     });
   };
 
-  const validateRequiredFields = (fields: DynamicFieldsData): boolean => {
-    let allGood = true;
-    const badFields: DynamicFieldsData = { ...fields };
-    for (const k of Object.keys(fields)) {
-      if (fields[k].error) return false;
-      if (!fields[k].value) {
-        badFields[k].error = `${fields[k].name} is required.`;
-        allGood = false;
-      }
-    }
-    if (!allGood) {
-      setFieldData((prevFields) => ({
-        ...prevFields,
-        ...badFields,
-      }));
-    }
-    return allGood;
-  };
-
   useEffect(checkEqualPasswords, [
     fieldData.password,
     fieldData.passwordConfirm,
   ]);
 
-  const handleInputChange = (
-    name: string,
-    readableName: string,
-    value: string
-  ): void => {
-    let error;
-    if (name in UserFormFieldConstraints) {
-      error = UserFormFieldConstraints[name](value, readableName);
-    }
-    setFieldData((prevData) => {
-      const newData = { ...prevData };
-      newData[name] = { ...newData[name], value, error };
-      return newData;
-    });
-  };
-
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!validateRequiredFields(fieldData)) {
+    if (!validateRequiredFields<DynamicFieldsData>(fieldData, setFieldData)) {
       return;
     }
     const createdUserRes = await customAxios.post("/api/users", fieldData);
@@ -163,9 +132,11 @@ function SignupPage() {
             serial={field}
             name={fieldData[field].name}
             type={fieldData[field].type}
-            changeHandler={handleInputChange}
+            changeHandler={handleInputChangeWithErrors}
             error={fieldData[field].error}
             placeholder={fieldData[field].placeholder}
+            setState={setFieldData}
+            constraints={UserFormFieldConstraints}
           />
         ))}
         <SubmitButton type="submit">Sign Up</SubmitButton>

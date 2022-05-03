@@ -1,4 +1,7 @@
+/* eslint-disable no-restricted-syntax */
+import { Dispatch, SetStateAction } from "react";
 import validator from "validator";
+import { DynamicFieldsData } from "../pages/auth/signup";
 
 export const calculateAge = (dateToCompare: Date): string => {
   const dateRange = new Date().getTime() - dateToCompare.getTime();
@@ -28,6 +31,12 @@ const isValidUrl = (value: string): string => {
   return "";
 };
 
+const isAlphaNumeric = (value: string): string => {
+  if (!validator.isAlphanumeric(value))
+    return "must be a valid alphanumeric value";
+  return "";
+};
+
 const passwordConstraints = (value: string): string => {
   const regexes: RegExp[] = [/[\W|_]/, /[A-Z]/, /\d/];
   // eslint-disable-next-line no-restricted-syntax
@@ -52,7 +61,11 @@ const checkAllErrorValidators = (
   return "";
 };
 
-export const UserFormFieldConstraints = Object.freeze({
+export interface IConstraints {
+  [key: string]: (value: string, fieldName: string) => string;
+}
+
+export const UserFormFieldConstraints: IConstraints = Object.freeze({
   username(value: string, fieldName: string): string {
     const errorValidators: StringFnNoArgs[] = [
       isNotWithinRange.bind(this, 20, 3, value),
@@ -81,3 +94,66 @@ export const UserFormFieldConstraints = Object.freeze({
     return checkAllErrorValidators(errorValidators, fieldName);
   },
 });
+
+export const CreatePostConstraints: IConstraints = Object.freeze({
+  postTitle(value: string, fieldName: string): string {
+    const errorValidators: StringFnNoArgs[] = [
+      isNotWithinRange.bind(this, 100, 10, value),
+    ];
+    return checkAllErrorValidators(errorValidators, fieldName);
+  },
+  movie(value: string, fieldName: string): string {
+    const errorValidators: StringFnNoArgs[] = [
+      isAlphaNumeric.bind(this, value),
+    ];
+    return checkAllErrorValidators(errorValidators, fieldName);
+  },
+});
+
+export const validateRequiredFields = <T,>(
+  fields: DynamicFieldsData,
+  setState: Dispatch<SetStateAction<T>>
+): boolean => {
+  let allGood = true;
+  const badFields: DynamicFieldsData = { ...fields };
+  for (const k of Object.keys(fields)) {
+    if (fields[k].error) return false;
+    if (!fields[k].value) {
+      badFields[k].error = `${fields[k].name} is required.`;
+      allGood = false;
+    }
+  }
+  if (!allGood) {
+    setState((prevFields) => ({
+      ...prevFields,
+      ...badFields,
+    }));
+  }
+  return allGood;
+};
+
+export interface HandleInputChangeProps<T> {
+  name: string;
+  readableName: string;
+  value: string;
+  constraints: IConstraints;
+  setState: Dispatch<SetStateAction<T>>;
+}
+
+export const handleInputChangeWithErrors = ({
+  name,
+  readableName,
+  value,
+  constraints,
+  setState,
+}: HandleInputChangeProps<DynamicFieldsData>): void => {
+  let error;
+  if (name in constraints) {
+    error = constraints[name](value, readableName);
+  }
+  setState((prevData) => {
+    const newData = { ...prevData };
+    newData[name] = { ...newData[name], value, error };
+    return newData;
+  });
+};

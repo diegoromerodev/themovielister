@@ -100,6 +100,7 @@ export const UserThumb = styled.div`
 `;
 
 export const HoverLink = styled.a`
+  font-weight: 600;
   &:hover {
     color: ${ColorPalette.warning};
   }

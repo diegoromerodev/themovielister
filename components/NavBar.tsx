@@ -82,6 +82,7 @@ const UserLinkContainer = styled.a`
   }
   .logout {
     padding: 10px;
+    border-radius: 50%;
     :hover {
       background-color: ${ColorPalette.lightGray};
     }
@@ -113,7 +114,7 @@ function NavBar() {
               </a>
             </Link>
             <Link href="/auth/logout" passHref>
-              <a className="logout">
+              <a title="Log out" className="logout">
                 <FontAwesomeIcon icon={faDoorOpen} />
               </a>
             </Link>

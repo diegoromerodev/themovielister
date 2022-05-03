@@ -1,6 +1,9 @@
 import { faBomb } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Dispatch, SetStateAction } from "react";
 import styled from "styled-components";
+import { HandleInputChangeProps, IConstraints } from "../lib/utils";
+import { DynamicFieldsData } from "../pages/auth/signup";
 import ColorPalette from "../styles/ColorPalette";
 
 export const StyledTextInput = styled.input`
@@ -38,13 +41,15 @@ export const FormContainer = styled.form`
   text-align: center;
 `;
 
-interface InputWithErrorsProps {
+interface InputWithErrorsProps<T> {
   name: string;
   error?: string;
   placeholder: string;
   type: string;
   serial: string;
-  changeHandler: (name: string, readableName: string, value: string) => void;
+  constraints: IConstraints;
+  setState: Dispatch<SetStateAction<T>>;
+  changeHandler: (props: HandleInputChangeProps<DynamicFieldsData>) => void;
 }
 
 export function InputWithErrors({
@@ -53,15 +58,25 @@ export function InputWithErrors({
   placeholder,
   type,
   serial,
+  constraints,
   changeHandler,
-}: InputWithErrorsProps): JSX.Element {
+  setState,
+}: InputWithErrorsProps<DynamicFieldsData>): JSX.Element {
   return (
     <>
       <StyledTextInput
         name={name}
         type={type}
         placeholder={placeholder}
-        onChange={({ target: { value } }) => changeHandler(serial, name, value)}
+        onChange={({ target: { value } }) =>
+          changeHandler({
+            name: serial,
+            readableName: name,
+            value,
+            constraints,
+            setState,
+          })
+        }
       />
       {error && (
         <ErrorMessage>
