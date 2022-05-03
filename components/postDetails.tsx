@@ -1,4 +1,4 @@
-import { faLock } from "@fortawesome/free-solid-svg-icons";
+import { faComments, faLock } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import Link from "next/link";
@@ -67,14 +67,16 @@ export const CommentCreationContainer = styled.form`
 
 export const SubmitButton = styled.button`
   padding: 0.5rem 1rem;
-  border: 1px solid ${ColorPalette.light};
   color: ${ColorPalette.light};
-  background-color: ${ColorPalette.gray};
+  background-color: ${ColorPalette.info};
+  border: 2px solid ${ColorPalette.light};
   font-weight: 600;
   cursor: pointer;
   font-family: "Inter";
+  border-radius: 0.5rem;
+  align-self: flex-end;
   :hover {
-    background-color: ${ColorPalette.dark};
+    background-color: ${ColorPalette.info}7a;
   }
 `;
 
@@ -84,6 +86,10 @@ export const CommentTextBox = styled.textarea`
   padding: 10px;
   width: 100%;
   color: ${ColorPalette.light};
+  font-family: Inter;
+  :focus {
+    outline: 1px solid ${ColorPalette.info};
+  }
 `;
 
 export function UserInfoPostHeader({
@@ -129,11 +135,18 @@ export function CommentCreator({
   handleSubmit,
 }: {
   user: UserSchema;
-  handleSubmit: (e: FormEvent<HTMLFormElement>, body: string) => void;
+  handleSubmit: (e: FormEvent<HTMLFormElement>, body: string) => Promise<void>;
 }) {
   const [commentText, setCommentText] = useState("");
+
+  const submitterMiddleman = async (e: FormEvent<HTMLFormElement>) => {
+    // e.preventDefault();
+    await handleSubmit(e, commentText);
+    setCommentText("");
+  };
+
   return (
-    <CommentCreationContainer onSubmit={(e) => handleSubmit(e, commentText)}>
+    <CommentCreationContainer onSubmit={submitterMiddleman}>
       {!user?.username && (
         <UnauthenticatedComment>
           <Link href="/auth/login" passHref>
@@ -156,7 +169,10 @@ export function CommentCreator({
             {user?.username || "Joe Smith"}
           </span>
         </p>
-        <SubmitButton type="submit">Submit reply</SubmitButton>
+        <SubmitButton type="submit">
+          <FontAwesomeIcon icon={faComments} />
+          &nbsp;&nbsp;Submit reply
+        </SubmitButton>
       </div>
     </CommentCreationContainer>
   );

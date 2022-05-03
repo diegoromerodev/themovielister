@@ -42,7 +42,7 @@ function MovieDetails({
         body,
       }
     );
-    const commentData: CommentSchema = newCommentRes.data;
+    const commentData: CommentSchema = newCommentRes?.data;
     if (commentData) {
       setLocalComments((prevComments) => [...prevComments, commentData]);
     }

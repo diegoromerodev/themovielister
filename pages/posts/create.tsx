@@ -4,6 +4,8 @@ import { RawDraftContentState } from "react-draft-wysiwyg";
 import draftToHtml from "draftjs-to-html";
 import axios from "axios";
 import { useRouter } from "next/router";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPencilRuler } from "@fortawesome/free-solid-svg-icons";
 import { InputWithErrors } from "../../components/forms";
 import { SectionContainer, SectionHeader } from "../../components/tabloids";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
@@ -128,7 +130,10 @@ function CreatePost() {
             </option>
           ))}
         </StyledSelect>
-        <SubmitButton>Submit post</SubmitButton>
+        <SubmitButton>
+          <FontAwesomeIcon icon={faPencilRuler} />
+          &nbsp;&nbsp;Submit post
+        </SubmitButton>
       </CreatePostForm>
     </SectionContainer>
   );
