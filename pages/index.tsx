@@ -14,7 +14,7 @@ import {
   SectionContainer,
   SectionHeader,
 } from "../components/tabloids";
-import { CategorySchema } from "../lib/types";
+import { CategorySchema, CommentSchema } from "../lib/types";
 import { customAxios } from "../lib/hooks/useAxiosInterceptor";
 import { CenteringPositions, FlexRow } from "../components/containers";
 import ColorPalette from "../styles/ColorPalette";
@@ -30,7 +30,13 @@ const SeeMoreLink = styled.a`
   border-radius: 4rem;
 `;
 
-function HomePage({ categories }: { categories: CategorySchema[] }) {
+function HomePage({
+  categories,
+  commentsPerPostHash,
+}: {
+  categories: CategorySchema[];
+  commentsPerPostHash: { [key: number]: number };
+}) {
   return categories?.map((cat) => (
     <SectionContainer key={`category-header-${cat.id}`}>
       <FlexRow
@@ -50,7 +56,11 @@ function HomePage({ categories }: { categories: CategorySchema[] }) {
         </Link>
       </FlexRow>
       {cat.Posts?.slice(0, 4).map((post) => (
-        <PostPreviewDetails key={`index-post-${post.id}`} post={post} />
+        <PostPreviewDetails
+          commentCount={commentsPerPostHash[post.id]}
+          key={`index-post-${post.id}`}
+          post={post}
+        />
       ))}
     </SectionContainer>
   ));
@@ -59,11 +69,28 @@ function HomePage({ categories }: { categories: CategorySchema[] }) {
 export const getServerSideProps: GetServerSideProps = async () => {
   await pgSequelize.sync({ force: true });
   const catRes = await customAxios.get("/api/categories");
-  const categories: CategorySchema = catRes.data;
+  const allCommentsRes = await customAxios.get<CommentSchema[]>(
+    "/api/comments"
+  );
+  let commentsPerPostHash;
+  //   debugger;
+  if (allCommentsRes?.data) {
+    commentsPerPostHash = allCommentsRes?.data.reduce((hash, curr) => {
+      const newHash = { ...hash };
+      if (Object.prototype.hasOwnProperty.call(hash, curr.PostId)) {
+        newHash[curr.PostId] += 1;
+      } else {
+        newHash[curr.PostId] = 1;
+      }
+      return newHash;
+    }, {});
+  }
 
+  const categories: CategorySchema = catRes.data;
   return {
     props: {
       categories,
+      commentsPerPostHash,
     },
   };
 };

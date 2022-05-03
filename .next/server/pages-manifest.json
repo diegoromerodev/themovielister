@@ -1,5 +1,12 @@
 {
   "/_app": "pages/_app.js",
   "/_document": "pages/_document.js",
-  "/_error": "pages/_error.js"
+  "/_error": "pages/_error.js",
+  "/": "pages/index.js",
+  "/api/categories": "pages/api/categories.js",
+  "/api/comments": "pages/api/comments.js",
+  "/api/auth/verify": "pages/api/auth/verify.js",
+  "/posts/[postId]": "pages/posts/[postId].js",
+  "/api/posts/[postId]": "pages/api/posts/[postId].js",
+  "/api/posts/[postId]/comments": "pages/api/posts/[postId]/comments.js"
 }

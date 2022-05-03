@@ -3,6 +3,9 @@ import Image from "next/image";
 import Link from "next/link";
 import styled from "styled-components";
 import ellipsize from "ellipsize";
+import { useEffect, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faComment } from "@fortawesome/free-solid-svg-icons";
 import { PostSchema } from "../lib/types";
 import ColorPalette from "../styles/ColorPalette";
 import { CircularAvatar } from "./userDetails";
@@ -37,6 +40,7 @@ export const PostItem = styled.div`
   padding: 0.5rem;
   display: flex;
   gap: 1rem;
+  align-items: center;
   border-top: 1px solid ${ColorPalette.dark};
   img {
     transition: all 0.4s ease;
@@ -61,6 +65,11 @@ export const PostInfo = styled.div`
   small {
     font-weight: 200;
   }
+  @media (max-width: 1200px) {
+    small {
+      font-size: 0.7rem;
+    }
+  }
 `;
 
 export const MovieThumb = styled.a`
@@ -68,6 +77,7 @@ export const MovieThumb = styled.a`
   overflow: hidden;
   border: 1px solid ${ColorPalette.gray};
   cursor: pointer;
+  align-self: stretch;
   div {
     position: relative;
     height: 100%;
@@ -79,6 +89,16 @@ export const MovieThumb = styled.a`
     }
     img {
       position: absolute;
+    }
+  }
+  @media (max-width: 1200px) {
+    width: 8vmax;
+    height: 10vmax;
+    div {
+      h4 {
+        margin: 0.3rem;
+        font-size: 0.8rem;
+      }
     }
   }
 `;
@@ -95,6 +115,17 @@ export const UserThumb = styled.div`
     font-weight: 300;
     p {
       font-size: 0.7rem;
+    }
+  }
+  @media (max-width: 1200px) {
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.5rem;
+    .user-thumb-info {
+      align-items: flex-start;
+      a {
+        display: none;
+      }
     }
   }
 `;
@@ -122,7 +153,24 @@ export const BoldTextShadow = styled.h4<BoldTextShadowProps>`
   text-align: ${({ align }) => align};
 `;
 
-export function PostPreviewDetails({ post }: { post: PostSchema }) {
+export function PostPreviewDetails({
+  post,
+  commentCount,
+}: {
+  post: PostSchema;
+  commentCount: number;
+}) {
+  const [maxTitleLength, setMaxTitleLength] = useState(30);
+
+  const calculateMaxTitleLength = () => {
+    setMaxTitleLength(window.innerWidth <= 1200 ? 15 : 30);
+  };
+
+  useEffect(
+    () => window.addEventListener("resize", calculateMaxTitleLength),
+    []
+  );
+
   return (
     <PostItem>
       <Link href={`/movies/${post.Movie.imdbId}`} passHref>
@@ -135,7 +183,7 @@ export function PostPreviewDetails({ post }: { post: PostSchema }) {
               alt={`${post.Movie.title} poster`}
             />
             <BoldTextShadow align="center">
-              {ellipsize(post.Movie.title, 30)} ({post.Movie.year})
+              {ellipsize(post.Movie.title, maxTitleLength)} ({post.Movie.year})
             </BoldTextShadow>
           </div>
         </MovieThumb>
@@ -145,6 +193,11 @@ export function PostPreviewDetails({ post }: { post: PostSchema }) {
           <HoverLink>{post.title}</HoverLink>
         </Link>
         <small>Created on {new Date(post.createdAt).toUTCString()}</small>
+        <small>
+          <FontAwesomeIcon icon={faComment} />
+          &nbsp;&nbsp;{commentCount || "No"} comment
+          {commentCount === 1 ? "" : "s"}
+        </small>
       </PostInfo>
       <UserThumb>
         <div className="user-thumb-info">

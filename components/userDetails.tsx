@@ -56,6 +56,7 @@ const RoundImageContainer = styled.div<RoundAvatarProps>`
   border: 1px solid ${ColorPalette.gray};
   img {
     position: absolute;
+    border-radius: 50%;
   }
 `;
 
