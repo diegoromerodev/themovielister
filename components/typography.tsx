@@ -22,13 +22,14 @@ interface NoMediaProps {
   secondaryText: string;
 }
 
-const NoPostsSign = styled.div`
+const NoMediaText = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 100%;
   padding-bottom: 1rem;
+  text-align: center;
   h3 {
     font-size: 4rem;
     color: ${ColorPalette.gray};
@@ -39,13 +40,21 @@ const NoPostsSign = styled.div`
     color: ${ColorPalette.dark};
     font-size: 2rem;
   }
+  @media (max-width: 1200px) {
+    h3 {
+      font-size: 2rem;
+    }
+    h5 {
+      font-size: 1.2rem;
+    }
+  }
 `;
 
 export function NoMediaSign({ headerText, secondaryText }: NoMediaProps) {
   return (
-    <NoPostsSign>
+    <NoMediaText>
       <h3>{headerText}</h3>
       <h5>{secondaryText}</h5>
-    </NoPostsSign>
+    </NoMediaText>
   );
 }
