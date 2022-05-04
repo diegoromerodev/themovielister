@@ -59,6 +59,7 @@ export const PostInfo = styled.div`
   flex-direction: column;
   gap: 0.5rem;
   flex: 1;
+  cursor: pointer;
   p {
     font-weight: 700;
   }
@@ -188,17 +189,17 @@ export function PostPreviewDetails({
           </div>
         </MovieThumb>
       </Link>
-      <PostInfo>
-        <Link key={`post-index-${post.id}`} href={`/posts/${post.id}`} passHref>
+      <Link key={`post-index-${post.id}`} href={`/posts/${post.id}`} passHref>
+        <PostInfo>
           <HoverLink>{post.title}</HoverLink>
-        </Link>
-        <small>Created on {new Date(post.createdAt).toUTCString()}</small>
-        <small>
-          <FontAwesomeIcon icon={faComment} />
-          &nbsp;&nbsp;{commentCount || "No"} comment
-          {commentCount === 1 ? "" : "s"}
-        </small>
-      </PostInfo>
+          <small>Created on {new Date(post.createdAt).toUTCString()}</small>
+          <small>
+            <FontAwesomeIcon icon={faComment} />
+            &nbsp;&nbsp;{commentCount || "No"} comment
+            {commentCount === 1 ? "" : "s"}
+          </small>
+        </PostInfo>
+      </Link>
       <UserThumb>
         <div className="user-thumb-info">
           <p>Created by:</p>

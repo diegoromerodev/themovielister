@@ -66,7 +66,7 @@ const AbsoluteUserThumb = styled(UserThumb)`
   justify-content: flex-end;
 `;
 
-const UserLinkContainer = styled.a`
+const UserLinkContainer = styled.div`
   display: flex;
   align-items: center;
   padding: 1rem;
@@ -79,10 +79,12 @@ const UserLinkContainer = styled.a`
     display: flex;
     padding: 0 1rem;
     gap: 1rem;
+    cursor: pointer;
   }
   .logout {
     padding: 10px;
     border-radius: 50%;
+    cursor: pointer;
     :hover {
       background-color: ${ColorPalette.lightGray};
     }
@@ -105,18 +107,18 @@ function NavBar() {
         {userData?.username && (
           <UserLinkContainer>
             <Link href={`/users/${userData.id}`} passHref>
-              <a className="user-link">
+              <span className="user-link">
                 <div className="user-thumb-info">
                   <p>Logged in as:</p>
                   <HoverLink>{userData.username}</HoverLink>
                 </div>
                 <CircularAvatar imageURL={userData.avatarURL} />
-              </a>
+              </span>
             </Link>
             <Link href="/auth/logout" passHref>
-              <a title="Log out" className="logout">
+              <span title="Log out" className="logout">
                 <FontAwesomeIcon icon={faDoorOpen} />
-              </a>
+              </span>
             </Link>
           </UserLinkContainer>
         )}
