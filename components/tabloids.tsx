@@ -191,7 +191,7 @@ export function PostPreviewDetails({
       </Link>
       <Link key={`post-index-${post.id}`} href={`/posts/${post.id}`} passHref>
         <PostInfo>
-          <HoverLink>{post.title}</HoverLink>
+          <HoverLink>{ellipsize(post.title, 30)}</HoverLink>
           <small>Created on {new Date(post.createdAt).toUTCString()}</small>
           <small>
             <FontAwesomeIcon icon={faComment} />
