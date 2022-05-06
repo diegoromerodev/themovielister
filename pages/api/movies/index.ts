@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { serverAxios } from "../../../lib/serverside/serverAxiosInterceptors";
+import tokenMiddleware from "../../../lib/tokenMiddleware";
 import Movie from "../../../schemas/movie";
 
 export const addMovie = async (imdbId: string) => {
@@ -20,10 +21,20 @@ export const addMovie = async (imdbId: string) => {
 };
 
 const moviesHandler = async (req: NextApiRequest, res: NextApiResponse) => {
+  let user;
+  try {
+    user = await tokenMiddleware(req);
+  } catch (err) {
+    user = false;
+  }
   let movieData;
   const { imdbId } = req.body;
   switch (req.method) {
     case "POST":
+      if (!user || user.role === "member")
+        return res
+          .status(401)
+          .json({ error: "You are not allowed to do that." });
       movieData = await addMovie(imdbId);
       break;
     default:
