@@ -1,42 +1,38 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
-import dynamic from "next/dynamic";
-import { RawDraftContentState } from "react-draft-wysiwyg";
 import draftToHtml from "draftjs-to-html";
-import axios from "axios";
 import { useRouter } from "next/router";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPencilRuler } from "@fortawesome/free-solid-svg-icons";
-import { InputWithErrors } from "../../components/forms";
+import {
+  ContentState,
+  convertFromHTML,
+  convertToRaw,
+  RawDraftContentState,
+} from "draft-js";
 import { SectionContainer, SectionHeader } from "../../components/tabloids";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { SubmitButton } from "../../components/postDetails";
 import { PostSchema } from "../../lib/types";
-import {
-  CreatePostForm,
-  RichEditorWrapper,
-  StyledSelect,
-} from "../../components/createPost";
 import { customAxios } from "../../lib/hooks/useAxiosInterceptor";
 import { DynamicFieldsData } from "../auth/signup";
-import {
-  CreatePostConstraints,
-  handleInputChangeWithErrors,
-  validateRequiredFields,
-} from "../../lib/utils";
-
-const Editor = dynamic(
-  async () => {
-    const importRD = await import("react-draft-wysiwyg");
-    return importRD.Editor;
-  },
-  { ssr: false }
-);
+import { validateRequiredFields } from "../../lib/utils";
+import { PostCreator } from "../../components/PostCreator";
 
 function CreatePost() {
   const [bodyText, setBodyText] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("1");
   const [allCategories, setAllCategories] = useState([]);
   const router = useRouter();
+
+  const [initialEditorState, setInitialEditorState] =
+    useState<RawDraftContentState>({
+      entityMap: {},
+      blocks: [],
+    });
+
+  useEffect(() => {
+    const content = ContentState.createFromBlockArray(
+      convertFromHTML("").contentBlocks
+    );
+    setInitialEditorState(convertToRaw(content));
+  }, []);
 
   const [fieldData, setFieldData] = useState<DynamicFieldsData>({
     postTitle: {
@@ -57,7 +53,7 @@ function CreatePost() {
 
   useEffect(() => {
     const fetchCategories = async () => {
-      const allCatsRes = await axios.get("/api/categories");
+      const allCatsRes = await customAxios.get("/api/categories");
       const allCatsData = allCatsRes.data;
       if (allCatsData) {
         setAllCategories(allCatsData);
@@ -98,43 +94,16 @@ function CreatePost() {
   return (
     <SectionContainer>
       <SectionHeader>Create a post</SectionHeader>
-      <CreatePostForm onSubmit={submitPost}>
-        {Object.keys(fieldData).map((field) => (
-          <InputWithErrors
-            key={fieldData[field].name}
-            serial={field}
-            name={fieldData[field].name}
-            type={fieldData[field].type}
-            changeHandler={handleInputChangeWithErrors}
-            error={fieldData[field].error}
-            placeholder={fieldData[field].placeholder}
-            setState={setFieldData}
-            constraints={CreatePostConstraints}
-          />
-        ))}
-        <RichEditorWrapper>
-          <Editor
-            placeholder="What's on your mind?"
-            toolbarClassName="editor-toolbar"
-            editorClassName="editor-body"
-            onChange={handleBodyChange}
-          />
-        </RichEditorWrapper>
-        <StyledSelect
-          value={selectedCategory}
-          onChange={handleCategorySelection}
-        >
-          {allCategories.map((c) => (
-            <option key={`categories-${c.id}`} value={c.id}>
-              {c.name}
-            </option>
-          ))}
-        </StyledSelect>
-        <SubmitButton>
-          <FontAwesomeIcon icon={faPencilRuler} />
-          &nbsp;&nbsp;Submit post
-        </SubmitButton>
-      </CreatePostForm>
+      <PostCreator
+        initialEditorState={initialEditorState}
+        submitPost={submitPost}
+        fieldData={fieldData}
+        setFieldData={setFieldData}
+        handleBodyChange={handleBodyChange}
+        selectedCategory={selectedCategory}
+        handleCategorySelection={handleCategorySelection}
+        allCategories={allCategories}
+      />
     </SectionContainer>
   );
 }

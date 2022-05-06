@@ -43,6 +43,7 @@ export const FormContainer = styled.form`
 
 interface InputWithErrorsProps<T> {
   name: string;
+  value: string;
   error?: string;
   placeholder: string;
   type: string;
@@ -54,6 +55,7 @@ interface InputWithErrorsProps<T> {
 
 export function InputWithErrors({
   name,
+  value,
   error,
   placeholder,
   type,
@@ -66,13 +68,14 @@ export function InputWithErrors({
     <>
       <StyledTextInput
         name={name}
+        value={value}
         type={type}
         placeholder={placeholder}
-        onChange={({ target: { value } }) =>
+        onChange={({ target }) =>
           changeHandler({
             name: serial,
             readableName: name,
-            value,
+            value: target.value,
             constraints,
             setState,
           })
