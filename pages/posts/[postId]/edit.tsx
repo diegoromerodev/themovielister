@@ -63,8 +63,15 @@ function EditPostView({
   });
 
   useEffect(() => {
-    if (!post || (appData.userData && post.UserId !== appData.userData.id))
+    const userSavedSession = localStorage.getItem(
+      process.env.NEXT_PUBLIC_TOKEN_STORAGE
+    );
+    if (
+      !userSavedSession ||
+      (appData.userData && post.UserId !== appData.userData.id)
+    ) {
       router.push("/");
+    }
   }, [appData]);
 
   const handleBodyChange = (contentState: RawDraftContentState) => {
@@ -88,14 +95,15 @@ function EditPostView({
       category: selectedCategory,
       body: bodyText,
     };
-    const postingRes = await customAxios.post(`/api/posts`, reqBody);
+    const postingRes = await customAxios.put(`/api/posts/${post.id}`, reqBody);
     const savedPost: PostSchema = postingRes?.data;
     if (savedPost) {
       router.push(`/posts/${savedPost.id}`);
     }
   };
 
-  if (!post) return null;
+  if (!post || !appData.userData || post.UserId !== appData.userData.id)
+    return null;
 
   return (
     <SectionContainer>
@@ -109,6 +117,7 @@ function EditPostView({
         selectedCategory={selectedCategory}
         handleCategorySelection={handleCategorySelection}
         allCategories={categories}
+        showCategory={["admin", "mod"].includes(appData.userData.role)}
       />
     </SectionContainer>
   );

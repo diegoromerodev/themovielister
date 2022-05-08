@@ -34,7 +34,7 @@ export interface PostSchema extends Model {
   title?: string;
   body?: string;
   CategoryId?: number | null;
-  MovieId: string | null;
+  MovieId?: string | null;
   setUser?: (user: UserSchema) => Promise<void>;
   setMovie?: (movie: MovieSchema) => Promise<void>;
   setCategory?: (category: CategorySchema) => Promise<void>;

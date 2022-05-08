@@ -117,7 +117,7 @@ function SignupPage() {
       const token: string = loginRes.data.toString();
       const userData: UserSchema = createdUserRes.data;
       setAppData((prevState) => ({ ...prevState, userData, token }));
-      localStorage.setItem("loginToken", token);
+      localStorage.setItem(process.env.NEXT_PUBLIC_TOKEN_STORAGE, token);
       router.push("/");
     }
   };
@@ -130,6 +130,7 @@ function SignupPage() {
           <InputWithErrors
             key={fieldData[field].name}
             serial={field}
+            value={fieldData[field].value}
             name={fieldData[field].name}
             type={fieldData[field].type}
             changeHandler={handleInputChangeWithErrors}

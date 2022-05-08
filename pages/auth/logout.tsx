@@ -21,7 +21,11 @@ function LogoutPage() {
 
   const handleLogoutClick = () => {
     localStorage.clear();
-    setAppData({ userData: null, token: null });
+    setAppData((prevAppData) => ({
+      ...prevAppData,
+      userData: null,
+      token: null,
+    }));
     router.push("/auth/login");
   };
 

@@ -16,7 +16,7 @@ const categoriesHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     switch (req.method) {
       case "POST":
-        if (!user || user.role === "member")
+        if (!user || !["admin", "mod"].includes(user.role))
           return res.status(401).json({ error: "Not enough privileges." });
         catData = await Category.create({
           name: req.body.name,

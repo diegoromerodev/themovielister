@@ -44,7 +44,7 @@ export const PostItem = styled.div`
   border-top: 1px solid ${ColorPalette.dark};
   img {
     transition: all 0.4s ease;
-    filter: saturate(0%);
+    filter: saturate(25%);
   }
   &:hover {
     background: linear-gradient(0deg, #333, #322);

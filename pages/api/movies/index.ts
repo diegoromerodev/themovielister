@@ -31,7 +31,7 @@ const moviesHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { imdbId } = req.body;
   switch (req.method) {
     case "POST":
-      if (!user || user.role === "member")
+      if (!user || !["admin", "mod"].includes(user.role))
         return res
           .status(401)
           .json({ error: "You are not allowed to do that." });

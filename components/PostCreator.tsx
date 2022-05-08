@@ -2,13 +2,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencilRuler } from "@fortawesome/free-solid-svg-icons";
 import { RawDraftContentState } from "draft-js";
 import dynamic from "next/dynamic";
-import {
-  FormEvent,
-  ChangeEvent,
-  Dispatch,
-  SetStateAction,
-  useContext,
-} from "react";
+import { FormEvent, ChangeEvent, Dispatch, SetStateAction } from "react";
 import { InputWithErrors } from "./forms";
 import { SubmitButton } from "./postDetails";
 import { CreatePostForm, RichEditorWrapper, StyledSelect } from "./createPost";
@@ -16,9 +10,8 @@ import {
   CreatePostConstraints,
   handleInputChangeWithErrors,
 } from "../lib/utils";
-import { AppDataContext, CategorySchema } from "../lib/types";
+import { CategorySchema } from "../lib/types";
 import { DynamicFieldsData } from "../pages/auth/signup";
-import AppContext from "../lib/AppContext";
 
 export const Editor = dynamic(
   async () => {
@@ -37,6 +30,7 @@ export interface PostCreatorProps {
   handleCategorySelection: (e: ChangeEvent<HTMLSelectElement>) => void;
   allCategories: CategorySchema[];
   initialEditorState: RawDraftContentState;
+  showCategory: boolean;
 }
 
 export function PostCreator({
@@ -48,8 +42,8 @@ export function PostCreator({
   handleCategorySelection,
   allCategories,
   initialEditorState,
+  showCategory,
 }: PostCreatorProps) {
-  const [appData]: AppDataContext = useContext(AppContext);
   return (
     <CreatePostForm onSubmit={submitPost}>
       {Object.keys(fieldData).map((field) => (
@@ -75,13 +69,18 @@ export function PostCreator({
           onChange={handleBodyChange}
         />
       </RichEditorWrapper>
-      <StyledSelect value={selectedCategory} onChange={handleCategorySelection}>
-        {allCategories.map((c) => (
-          <option key={`categories-${c.id}`} value={c.id}>
-            {c.name}
-          </option>
-        ))}
-      </StyledSelect>
+      {showCategory && (
+        <StyledSelect
+          value={selectedCategory}
+          onChange={handleCategorySelection}
+        >
+          {allCategories.map((c) => (
+            <option key={`categories-${c.id}`} value={c.id}>
+              {c.name}
+            </option>
+          ))}
+        </StyledSelect>
+      )}
       <SubmitButton>
         <FontAwesomeIcon icon={faPencilRuler} />
         &nbsp;&nbsp;Submit post

@@ -19,7 +19,7 @@ function LoginPage() {
       password: password.value,
     });
     if (token) {
-      localStorage.setItem("loginToken", token.data);
+      localStorage.setItem(process.env.NEXT_PUBLIC_TOKEN_STORAGE, token.data);
       setAppData((prevData) => ({ ...prevData, token: token.data }));
       router.push("/");
     }

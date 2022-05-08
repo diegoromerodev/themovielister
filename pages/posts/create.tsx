@@ -103,6 +103,7 @@ function CreatePost() {
         selectedCategory={selectedCategory}
         handleCategorySelection={handleCategorySelection}
         allCategories={allCategories}
+        showCategory
       />
     </SectionContainer>
   );

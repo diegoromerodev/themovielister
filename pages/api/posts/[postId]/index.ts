@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { Model } from "sequelize/types";
 import tokenMiddleware from "../../../../lib/tokenMiddleware";
-import { PostSchema, UserSchema } from "../../../../lib/types";
+import { CategorySchema, PostSchema, UserSchema } from "../../../../lib/types";
+import Category from "../../../../schemas/category";
 import Movie from "../../../../schemas/movie";
 import Post from "../../../../schemas/post";
 import User from "../../../../schemas/user";
@@ -12,7 +12,7 @@ interface IdBody {
   postId?: PostId;
 }
 
-const getPost = async (postId: number): Promise<Model | null> => {
+const getPost = async (postId: number): Promise<PostSchema | null> => {
   try {
     const post = await Post.findByPk(postId, { include: [User, Movie] });
     return post;
@@ -34,7 +34,8 @@ const updatePost = async (
   postId: number,
   user: UserSchema,
   title: string,
-  body: string
+  body: string,
+  category?: string
 ) => {
   const postToUpdate: PostSchema = await getPost(postId);
   if (postToUpdate.UserId !== user.id) {
@@ -46,6 +47,10 @@ const updatePost = async (
   if (body) {
     postToUpdate.body = body;
   }
+  if (category && ["admin", "mod"].includes(user.role)) {
+    const categoryToUpdate: CategorySchema = await Category.findByPk(category);
+    if (categoryToUpdate) postToUpdate.setCategory(categoryToUpdate);
+  }
   const result = await postToUpdate.save();
   return result;
 };
@@ -53,7 +58,7 @@ const updatePost = async (
 const postFinder = async (req: NextApiRequest, res: NextApiResponse) => {
   let { postId }: IdBody = req.query;
   postId = Number(postId);
-  const { title, body } = req.body;
+  const { title, body, category } = req.body;
   let user;
   try {
     user = await tokenMiddleware(req);
@@ -66,7 +71,13 @@ const postFinder = async (req: NextApiRequest, res: NextApiResponse) => {
       postData = await getPost(postId);
       break;
     case "PUT":
-      postData = await updatePost(postId, user, String(title), String(body));
+      postData = await updatePost(
+        postId,
+        user,
+        String(title),
+        String(body),
+        String(category)
+      );
       break;
     case "DELETE":
       if (typeof postId === "number") {

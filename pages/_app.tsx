@@ -35,7 +35,9 @@ function App({ Component, pageProps }: ExtendedAppProps) {
   }, [userData]);
 
   useEffect(() => {
-    const logToken = localStorage.getItem("loginToken");
+    const logToken = localStorage.getItem(
+      process.env.NEXT_PUBLIC_TOKEN_STORAGE
+    );
     if (logToken) {
       setAppData({ ...appData, token: logToken });
     }
