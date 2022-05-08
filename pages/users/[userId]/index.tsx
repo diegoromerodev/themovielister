@@ -58,7 +58,7 @@ function UserDetailsHandler({ userData }: { userData: UserSchema }) {
           {userData.username.toUpperCase()}&apos;S POSTS
         </SectionHeader>
         {userData.Posts.map((post) => (
-          <PostPreviewDetails post={post} />
+          <PostPreviewDetails commentCount={0} post={post} />
         ))}
         {!userData.Posts.length && (
           <NoMediaSign

@@ -11,6 +11,7 @@ const newPost = async ({ title, body, movie, category }, user) => {
   if (!user) return false;
   let movieModel: boolean | Model;
   const categoryModel = await Category.findByPk(category);
+  debugger;
   movieModel = await Movie.findByPk(movie);
   if (!movieModel) {
     movieModel = await addMovie(movie);

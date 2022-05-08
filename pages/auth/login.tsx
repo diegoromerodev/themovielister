@@ -1,3 +1,5 @@
+import { faKey } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRouter } from "next/router";
 import { FormEvent, useContext } from "react";
 import { FormContainer, StyledTextInput } from "../../components/forms";
@@ -40,7 +42,9 @@ function LoginPage() {
           type="password"
           placeholder="Enter your password"
         />
-        <SubmitButton type="submit">Access</SubmitButton>
+        <SubmitButton type="submit">
+          <FontAwesomeIcon icon={faKey} /> Sign in
+        </SubmitButton>
       </FormContainer>
     </SectionContainer>
   );

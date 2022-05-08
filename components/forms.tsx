@@ -67,7 +67,7 @@ export function InputWithErrors({
   return (
     <>
       <StyledTextInput
-        name={name}
+        name={serial}
         value={value}
         type={type}
         placeholder={placeholder}

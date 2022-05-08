@@ -7,6 +7,7 @@ export interface MovieSchema extends Model {
   imageURL?: string;
   title?: string;
   year?: number;
+  Posts?: PostSchema[];
 }
 
 export interface UserSchema extends Model {

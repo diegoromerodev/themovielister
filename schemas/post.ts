@@ -42,5 +42,8 @@ Category.hasMany(Post);
 Post.belongsTo(Movie, {
   foreignKey: "MovieId",
 });
+Movie.hasMany(Post, {
+  foreignKey: "MovieId",
+});
 
 export default Post;
