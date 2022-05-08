@@ -2,7 +2,7 @@ import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import Link from "next/link";
 import PropTypes, { number } from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFilm, faUser } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faFilm, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FormEvent, useContext, useState } from "react";
 import HTMLReactParser from "html-react-parser";
 import { HoverLink, SectionContainer } from "../../../components/tabloids";
@@ -11,6 +11,7 @@ import pgSequelize from "../../../lib/sequelize";
 import {
   ArtPostTitle,
   CommentCreator,
+  EditPostButton,
   MovieDetailsContainer,
   PostDetailsContainer,
   UserInfoPostHeader,
@@ -51,6 +52,14 @@ function MovieDetails({
     <>
       <SectionContainer>
         <PostDetailsContainer>
+          {appData.userData && appData.userData.id === postData.UserId && (
+            <Link href={`/posts/${postData.id}/edit`} passHref>
+              <EditPostButton>
+                <FontAwesomeIcon icon={faEdit} />
+                <p>Edit post</p>
+              </EditPostButton>
+            </Link>
+          )}
           <ArtPostTitle>
             <h1>{postData.title}</h1>
             <div className="post-info-link">
@@ -144,6 +153,7 @@ MovieDetails.propTypes = {
     id: PropTypes.number,
     title: PropTypes.string,
     body: PropTypes.string,
+    UserId: PropTypes.number,
     User: PropTypes.shape({
       id: PropTypes.number,
       username: PropTypes.string,

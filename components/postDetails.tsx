@@ -177,3 +177,22 @@ export function CommentCreator({
     </CommentCreationContainer>
   );
 }
+
+export const EditPostButton = styled.button`
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  gap: 0.5rem;
+  border-radius: 0.2rem;
+  background-color: ${ColorPalette.success};
+  padding: 0.5rem 1rem;
+  color: ${ColorPalette.light};
+  font-family: "Inter";
+  border: 2px solid ${ColorPalette.light};
+  font-weight: 600;
+  cursor: pointer;
+  :hover {
+    background-color: ${ColorPalette.success}7a;
+  }
+`;
