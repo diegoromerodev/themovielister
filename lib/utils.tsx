@@ -2,6 +2,8 @@
 import { Dispatch, SetStateAction } from "react";
 import validator from "validator";
 import { DynamicFieldsData } from "../pages/auth/signup";
+import { customAxios } from "./hooks/useAxiosInterceptor";
+import { UserSchema } from "./types";
 
 export const calculateAge = (dateToCompare: Date): string => {
   const dateRange = new Date().getTime() - dateToCompare.getTime();
@@ -11,6 +13,15 @@ export const calculateAge = (dateToCompare: Date): string => {
     return `${ageInHours} hour${ageInHours >= 2 || !ageInHours ? "s" : ""}`;
   }
   return `${Math.round(numberOfDays)} day${numberOfDays >= 1.5 ? "s" : ""}`;
+};
+
+const isNotDuplicateUsername = async (username: string) => {
+  const usersRes = await customAxios("/api/users");
+  const users: UserSchema[] = usersRes.data;
+  const foundUser = users.find((u) => u.username === username);
+  debugger;
+  if (foundUser) return "is already taken.";
+  return "";
 };
 
 const isNotWithinRange = (max: number, min: number, value: string): string => {
@@ -47,46 +58,48 @@ const passwordConstraints = (value: string): string => {
   return "";
 };
 
-type StringFnNoArgs = () => string;
+type StringFnNoArgs = () => string | Promise<string>;
 
-const checkAllErrorValidators = (
+const checkAllErrorValidators = async (
   valArr: StringFnNoArgs[],
   fieldName: string
-): string => {
+): Promise<string> => {
   // eslint-disable-next-line no-restricted-syntax
   for (const valFn of valArr) {
-    const errResult = valFn();
+    // eslint-disable-next-line no-await-in-loop
+    const errResult = await valFn();
     if (errResult) return `${fieldName} ${errResult}`;
   }
   return "";
 };
 
 export interface IConstraints {
-  [key: string]: (value: string, fieldName: string) => string;
+  [key: string]: (value: string, fieldName: string) => Promise<string>;
 }
 
 export const UserFormFieldConstraints: IConstraints = Object.freeze({
-  username(value: string, fieldName: string): string {
+  async username(value: string, fieldName: string): Promise<string> {
     const errorValidators: StringFnNoArgs[] = [
       isNotWithinRange.bind(this, 20, 3, value),
+      isNotDuplicateUsername.bind(this, value),
     ];
     return checkAllErrorValidators(errorValidators, fieldName);
   },
-  avatarURL(value: string, fieldName: string): string {
+  async avatarURL(value: string, fieldName: string): Promise<string> {
     const errorValidators: StringFnNoArgs[] = [isValidUrl.bind(this, value)];
     return checkAllErrorValidators(errorValidators, fieldName);
   },
-  bio(value: string, fieldName: string): string {
+  async bio(value: string, fieldName: string): Promise<string> {
     const errorValidators: StringFnNoArgs[] = [
       isNotWithinRange.bind(this, 100, 20, value),
     ];
     return checkAllErrorValidators(errorValidators, fieldName);
   },
-  email(value: string, fieldName: string): string {
+  async email(value: string, fieldName: string): Promise<string> {
     const errorValidators: StringFnNoArgs[] = [isValidEmail.bind(this, value)];
     return checkAllErrorValidators(errorValidators, fieldName);
   },
-  password(value: string, fieldName: string): string {
+  async password(value: string, fieldName: string): Promise<string> {
     const errorValidators: StringFnNoArgs[] = [
       passwordConstraints.bind(this, value),
       isNotWithinRange.bind(this, 100, 8, value),
@@ -96,13 +109,13 @@ export const UserFormFieldConstraints: IConstraints = Object.freeze({
 });
 
 export const CreatePostConstraints: IConstraints = Object.freeze({
-  postTitle(value: string, fieldName: string): string {
+  async postTitle(value: string, fieldName: string): Promise<string> {
     const errorValidators: StringFnNoArgs[] = [
       isNotWithinRange.bind(this, 100, 10, value),
     ];
     return checkAllErrorValidators(errorValidators, fieldName);
   },
-  movie(value: string, fieldName: string): string {
+  async movie(value: string, fieldName: string): Promise<string> {
     const errorValidators: StringFnNoArgs[] = [
       isAlphaNumeric.bind(this, value),
     ];
@@ -140,16 +153,16 @@ export interface HandleInputChangeProps<T> {
   setState: Dispatch<SetStateAction<T>>;
 }
 
-export const handleInputChangeWithErrors = ({
+export const handleInputChangeWithErrors = async ({
   name,
   readableName,
   value,
   constraints,
   setState,
-}: HandleInputChangeProps<DynamicFieldsData>): void => {
+}: HandleInputChangeProps<DynamicFieldsData>): Promise<void> => {
   let error;
   if (name in constraints) {
-    error = constraints[name](value, readableName);
+    error = await constraints[name](value, readableName);
   }
   setState((prevData) => {
     const newData = { ...prevData };

@@ -3,8 +3,12 @@ import bcrypt from "bcryptjs";
 import User from "../../../schemas/user";
 
 const usersHandler = async (req: NextApiRequest, res: NextApiResponse) => {
-  if (req.method !== "POST")
+  if (!["POST", "GET"].includes(req.method))
     return res.status(400).json({ error: "No such endpoint." });
+  if (req.method === "GET") {
+    const allUsers = await User.findAll();
+    return res.json(allUsers);
+  }
   const { username, bio, avatarURL, email, firstName, lastName, password } =
     req.body;
   try {
