@@ -15,13 +15,35 @@ export const calculateAge = (dateToCompare: Date): string => {
   return `${Math.round(numberOfDays)} day${numberOfDays >= 1.5 ? "s" : ""}`;
 };
 
+interface PrevUserFetch {
+  userData: UserSchema[];
+  age: number;
+  debounceId: number;
+}
+
+const cachedUsers: PrevUserFetch = {
+  userData: null,
+  age: null,
+  debounceId: null,
+};
+
 const isNotDuplicateUsername = async (username: string) => {
-  const usersRes = await customAxios("/api/users");
-  const users: UserSchema[] = usersRes.data;
-  const foundUser = users.find((u) => u.username === username);
-  debugger;
-  if (foundUser) return "is already taken.";
-  return "";
+  const ageNow = new Date().getTime();
+  if (!cachedUsers.userData || ageNow - cachedUsers.age > 5000) {
+    const usersRes = await customAxios("/api/users");
+    cachedUsers.userData = usersRes.data;
+    cachedUsers.age = new Date().getTime();
+  }
+  return new Promise((resolve) => {
+    if (cachedUsers.debounceId) clearTimeout(cachedUsers.debounceId);
+    cachedUsers.debounceId = window.setTimeout(() => {
+      const foundUser = cachedUsers.userData.find(
+        (u) => u.username === username
+      );
+      if (foundUser) resolve("is already taken.");
+      resolve("");
+    }, 300);
+  });
 };
 
 const isNotWithinRange = (max: number, min: number, value: string): string => {
