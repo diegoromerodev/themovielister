@@ -182,13 +182,17 @@ export const handleInputChangeWithErrors = async ({
   constraints,
   setState,
 }: HandleInputChangeProps<DynamicFieldsData>): Promise<void> => {
-  let error;
-  if (name in constraints) {
-    error = await constraints[name](value, readableName);
-  }
   setState((prevData) => {
     const newData = { ...prevData };
-    newData[name] = { ...newData[name], value, error };
+    newData[name] = { ...newData[name], value };
     return newData;
   });
+  if (name in constraints) {
+    const error = await constraints[name](value, readableName);
+    setState((prevData) => {
+      const newData = { ...prevData };
+      newData[name] = { ...newData[name], error };
+      return newData;
+    });
+  }
 };
