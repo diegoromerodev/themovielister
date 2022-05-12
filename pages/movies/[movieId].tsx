@@ -7,10 +7,17 @@ import {
   SectionHeader,
 } from "../../components/tabloids";
 import { NoMediaSign } from "../../components/typography";
+import { CommentCountHash, getCommentCountHash } from "../../lib/fetchUtils";
 import { serverAxios } from "../../lib/serverside/serverAxiosInterceptors";
 import { MovieSchema } from "../../lib/types";
 
-function SingleMovie({ movie }: { movie: MovieSchema }) {
+function SingleMovie({
+  movie,
+  commentsPerPostHash,
+}: {
+  movie: MovieSchema;
+  commentsPerPostHash: CommentCountHash;
+}) {
   return (
     <SectionContainer>
       <SectionHeader>
@@ -28,7 +35,7 @@ function SingleMovie({ movie }: { movie: MovieSchema }) {
         <PostPreviewDetails
           key={`${movie.imdbId}-${post.id}`}
           post={post}
-          commentCount={0}
+          commentCount={commentsPerPostHash[post.id]}
         />
       ))}
     </SectionContainer>
@@ -40,9 +47,11 @@ export const getServerSideProps: GetServerSideProps = async (
 ) => {
   const movieRes = await serverAxios(`/api/movies/${ctx.query.movieId}`);
   const movie: MovieSchema = movieRes?.data;
+  const commentsPerPostHash = await getCommentCountHash();
   return {
     props: {
       movie,
+      commentsPerPostHash,
     },
   };
 };
