@@ -36,10 +36,15 @@
       "server/middleware-runtime.js",
       "server/pages/_middleware.js"
     ],
-    "/auth/signup": [
+    "/posts/[postId]": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/auth/signup.js"
+      "static/chunks/pages/posts/[postId].js"
+    ],
+    "/users/[userId]": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/users/[userId].js"
     ]
   },
   "ampFirstPages": []

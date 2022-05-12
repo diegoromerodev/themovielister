@@ -10,6 +10,7 @@ import {
   NoMediaSign,
   SecondaryParagraph,
 } from "../../../components/typography";
+import { CommentCountHash, getCommentCountHash } from "../../../lib/fetchUtils";
 import { serverAxios } from "../../../lib/serverside/serverAxiosInterceptors";
 import { UserSchema } from "../../../lib/types";
 import { calculateAge } from "../../../lib/utils";
@@ -31,7 +32,13 @@ const UserDetailsInfoContainer = styled.div`
   gap: 1rem;
 `;
 
-function UserDetailsHandler({ userData }: { userData: UserSchema }) {
+function UserDetailsHandler({
+  userData,
+  commentsPerPostHash,
+}: {
+  userData: UserSchema;
+  commentsPerPostHash: CommentCountHash;
+}) {
   return (
     <>
       <SectionContainer>
@@ -58,7 +65,10 @@ function UserDetailsHandler({ userData }: { userData: UserSchema }) {
           {userData.username.toUpperCase()}&apos;S POSTS
         </SectionHeader>
         {userData.Posts.map((post) => (
-          <PostPreviewDetails commentCount={0} post={post} />
+          <PostPreviewDetails
+            commentCount={commentsPerPostHash[post.id]}
+            post={post}
+          />
         ))}
         {!userData.Posts.length && (
           <NoMediaSign
@@ -77,10 +87,12 @@ export const getServerSideProps: GetServerSideProps = async (
   const userDataRes = await serverAxios.get(
     `/api/users/${context.query.userId}`
   );
+  const commentsPerPostHash = await getCommentCountHash();
   const userData = userDataRes.data;
   return {
     props: {
       userData,
+      commentsPerPostHash,
     },
   };
 };

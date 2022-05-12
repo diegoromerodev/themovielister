@@ -42,7 +42,7 @@ const isNotDuplicateUsername = async (username: string) => {
       );
       if (foundUser) resolve("is already taken.");
       resolve("");
-    }, 300);
+    }, 500);
   });
 };
 

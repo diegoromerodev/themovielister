@@ -14,10 +14,11 @@ import {
   SectionContainer,
   SectionHeader,
 } from "../components/tabloids";
-import { CategorySchema, CommentSchema } from "../lib/types";
+import { CategorySchema } from "../lib/types";
 import { customAxios } from "../lib/hooks/useAxiosInterceptor";
 import { CenteringPositions, FlexRow } from "../components/containers";
 import ColorPalette from "../styles/ColorPalette";
+import { CommentCountHash, getCommentCountHash } from "../lib/fetchUtils";
 
 const SeeMoreLink = styled.a`
   color: ${ColorPalette.light};
@@ -35,7 +36,7 @@ function HomePage({
   commentsPerPostHash,
 }: {
   categories: CategorySchema[];
-  commentsPerPostHash: { [key: number]: number };
+  commentsPerPostHash: CommentCountHash;
 }) {
   return categories?.map((cat) => (
     <SectionContainer key={`category-header-${cat.id}`}>
@@ -69,23 +70,7 @@ function HomePage({
 export const getServerSideProps: GetServerSideProps = async () => {
   await pgSequelize.sync({ force: true });
   const catRes = await customAxios.get("/api/categories");
-  const allCommentsRes = await customAxios.get<CommentSchema[]>(
-    "/api/comments"
-  );
-  let commentsPerPostHash;
-  //   debugger;
-  if (allCommentsRes?.data) {
-    commentsPerPostHash = allCommentsRes?.data.reduce((hash, curr) => {
-      const newHash = { ...hash };
-      if (Object.prototype.hasOwnProperty.call(hash, curr.PostId)) {
-        newHash[curr.PostId] += 1;
-      } else {
-        newHash[curr.PostId] = 1;
-      }
-      return newHash;
-    }, {});
-  }
-
+  const commentsPerPostHash = await getCommentCountHash();
   const categories: CategorySchema = catRes.data;
   return {
     props: {
