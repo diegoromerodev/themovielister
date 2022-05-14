@@ -2,12 +2,10 @@
   "/_app": "pages/_app.js",
   "/_document": "pages/_document.js",
   "/_error": "pages/_error.js",
+  "/api/auth/verify": "pages/api/auth/verify.js",
+  "/api/categories/[categoryId]": "pages/api/categories/[categoryId].js",
   "/api/comments": "pages/api/comments.js",
-  "/api/categories": "pages/api/categories.js",
+  "/categories/[categoryId]": "pages/categories/[categoryId].js",
   "/": "pages/index.js",
-  "/posts/[postId]": "pages/posts/[postId].js",
-  "/api/posts/[postId]": "pages/api/posts/[postId].js",
-  "/users/[userId]": "pages/users/[userId].js",
-  "/api/posts/[postId]/comments": "pages/api/posts/[postId]/comments.js",
-  "/api/users/[userId]": "pages/api/users/[userId].js"
+  "/api/categories": "pages/api/categories.js"
 }

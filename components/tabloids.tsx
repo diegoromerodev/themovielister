@@ -32,6 +32,9 @@ export const SectionHeader = styled.h2<SectionHeaderProps>`
   text-transform: uppercase;
   flex: 1;
   color: ${({ color }) => color || ColorPalette.light};
+  @media (max-width: 1200px) {
+    font-size: 0.95rem;
+  }
 `;
 
 export const PostItem = styled.div`

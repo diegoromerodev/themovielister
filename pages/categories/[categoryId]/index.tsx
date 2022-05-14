@@ -2,6 +2,7 @@ import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { ReactElement, useEffect } from "react";
 import { useRouter } from "next/router";
 import { AxiosResponse } from "axios";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CategorySchema } from "../../../lib/types";
 import {
   PostPreviewDetails,
@@ -9,12 +10,18 @@ import {
   SectionHeader,
 } from "../../../components/tabloids";
 import { serverAxios } from "../../../lib/serverside/serverAxiosInterceptors";
+import IconsList from "../../../styles/IconsList";
+import { CommentCountHash, getCommentCountHash } from "../../../lib/fetchUtils";
 
 interface CategoryDetailsProps {
   category: CategorySchema;
+  commentCountHash: CommentCountHash;
 }
 
-function CategoryDetails({ category }: CategoryDetailsProps): ReactElement {
+function CategoryDetails({
+  category,
+  commentCountHash,
+}: CategoryDetailsProps): ReactElement {
   const router = useRouter();
 
   useEffect(() => {
@@ -27,9 +34,16 @@ function CategoryDetails({ category }: CategoryDetailsProps): ReactElement {
 
   return (
     <SectionContainer>
-      <SectionHeader>{category.name}</SectionHeader>
+      <SectionHeader>
+        <FontAwesomeIcon icon={IconsList[category.id % IconsList.length]} />
+        &nbsp;&nbsp;{category.name}
+      </SectionHeader>
       {category.Posts?.map((post) => (
-        <PostPreviewDetails key={`index-post-${post.id}`} post={post} />
+        <PostPreviewDetails
+          key={`index-post-${post.id}`}
+          commentCount={commentCountHash[post.id]}
+          post={post}
+        />
       ))}
     </SectionContainer>
   );
@@ -45,9 +59,11 @@ export const getServerSideProps: GetServerSideProps = async (
   } catch {
     categoryRes = null;
   }
+  const commentCountHash = await getCommentCountHash();
   return {
     props: {
       category: categoryRes?.data || null,
+      commentCountHash,
     },
   };
 };

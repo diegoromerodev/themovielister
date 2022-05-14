@@ -4,10 +4,8 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faComments,
-  faMagnifyingGlassPlus,
-} from "@fortawesome/free-solid-svg-icons";
+import { faMagnifyingGlassPlus } from "@fortawesome/free-solid-svg-icons";
+import ellipsize from "ellipsize";
 import pgSequelize from "../lib/sequelize";
 import {
   PostPreviewDetails,
@@ -19,6 +17,7 @@ import { customAxios } from "../lib/hooks/useAxiosInterceptor";
 import { CenteringPositions, FlexRow } from "../components/containers";
 import ColorPalette from "../styles/ColorPalette";
 import { CommentCountHash, getCommentCountHash } from "../lib/fetchUtils";
+import IconsList from "../styles/IconsList";
 
 const SeeMoreLink = styled.a`
   color: ${ColorPalette.light};
@@ -29,6 +28,12 @@ const SeeMoreLink = styled.a`
   padding: 0.3rem 0.5rem;
   background-color: ${ColorPalette.info};
   border-radius: 4rem;
+  @media (max-width: 1200px) {
+    padding: 0.3rem 1rem;
+    .disappearResponsive {
+      display: none;
+    }
+  }
 `;
 
 function HomePage({
@@ -45,14 +50,14 @@ function HomePage({
         justify={CenteringPositions.Center}
       >
         <SectionHeader>
-          <FontAwesomeIcon icon={faComments} />
+          <FontAwesomeIcon icon={IconsList[cat.id % IconsList.length]} />
           &nbsp;&nbsp;
-          {cat.name}
+          {ellipsize(cat.name, 24)}
         </SectionHeader>
         <Link href={`/categories/${cat.id}`} passHref>
           <SeeMoreLink>
             <FontAwesomeIcon icon={faMagnifyingGlassPlus} />
-            &nbsp;&nbsp;See more posts
+            <span className="disappearResponsive">&nbsp;&nbsp;See more</span>
           </SeeMoreLink>
         </Link>
       </FlexRow>
