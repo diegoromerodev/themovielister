@@ -64,13 +64,15 @@ function HomePage({
           </SeeMoreLink>
         </Link>
       </FlexRow>
-      {cat.Posts?.slice(0, 4).map((post) => (
-        <PostPreviewDetails
-          commentCount={commentsPerPostHash[post.id]}
-          key={`index-post-${post.id}`}
-          post={post}
-        />
-      ))}
+      {cat.Posts?.slice(-4)
+        .reverse()
+        .map((post) => (
+          <PostPreviewDetails
+            commentCount={commentsPerPostHash[post.id]}
+            key={`index-post-${post.id}`}
+            post={post}
+          />
+        ))}
     </SectionContainer>
   ));
 }
