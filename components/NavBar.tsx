@@ -1,4 +1,4 @@
-import { faDoorOpen } from "@fortawesome/free-solid-svg-icons";
+import { faBars, faDoorOpen } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import { useContext } from "react";
@@ -10,6 +10,7 @@ import ColorPalette from "../styles/ColorPalette";
 import { HoverLink, UserThumb } from "./tabloids";
 import { CircularAvatar } from "./userDetails";
 import logo from "../lib/logo.svg";
+import { DisappearResponsiveCont } from "./containers";
 
 const NavContainer = styled.nav`
   background-color: ${ColorPalette.dark};
@@ -64,6 +65,23 @@ const UserLinkContainer = styled.div`
   }
 `;
 
+const HamburgerMenuButton = styled.button`
+  display: none;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background-color: ${ColorPalette.gray};
+  color: ${ColorPalette.light};
+  font-size: 1.2rem;
+  cursor: pointer;
+  :hover {
+    background-color: ${ColorPalette.lightGray};
+  }
+  @media (max-width: 1200px) {
+    display: initial;
+  }
+`;
+
 function NavBar() {
   const [{ userData }]: AppDataContext = useContext(AppContext);
   return (
@@ -76,23 +94,28 @@ function NavBar() {
       </Link>
       <AbsoluteUserThumb className="grow">
         {userData?.username && (
-          <UserLinkContainer>
-            <Link href={`/users/${userData.id}`} passHref>
-              <span className="user-link">
-                <div className="user-thumb-info">
-                  <p>Logged in as:</p>
-                  <HoverLink>{userData.username}</HoverLink>
-                </div>
-                <CircularAvatar imageURL={userData.avatarURL} />
-              </span>
-            </Link>
-            <Link href="/auth/logout" passHref>
-              <span title="Log out" className="logout">
-                <FontAwesomeIcon icon={faDoorOpen} />
-              </span>
-            </Link>
-          </UserLinkContainer>
+          <DisappearResponsiveCont>
+            <UserLinkContainer>
+              <Link href={`/users/${userData.id}`} passHref>
+                <span className="user-link">
+                  <div className="user-thumb-info">
+                    <p>Logged in as:</p>
+                    <HoverLink>{userData.username}</HoverLink>
+                  </div>
+                  <CircularAvatar imageURL={userData.avatarURL} />
+                </span>
+              </Link>
+              <Link href="/auth/logout" passHref>
+                <span title="Log out" className="logout">
+                  <FontAwesomeIcon icon={faDoorOpen} />
+                </span>
+              </Link>
+            </UserLinkContainer>
+          </DisappearResponsiveCont>
         )}
+        <HamburgerMenuButton>
+          <FontAwesomeIcon icon={faBars} />
+        </HamburgerMenuButton>
       </AbsoluteUserThumb>
     </NavContainer>
   );

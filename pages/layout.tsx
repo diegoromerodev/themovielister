@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import { createGlobalStyle } from "styled-components";
+import { DisappearResponsiveCont } from "../components/containers";
 import GlobalErrors from "../components/GlobalErrors";
 import NavBar from "../components/NavBar";
 import SecondaryNav from "../components/SecondaryNav";
@@ -26,7 +27,9 @@ function Layout({ children }) {
       <GlobalStyles />
       <GlobalErrors />
       <NavBar />
-      <SecondaryNav />
+      <DisappearResponsiveCont>
+        <SecondaryNav />
+      </DisappearResponsiveCont>
       <main>{children}</main>
     </>
   );

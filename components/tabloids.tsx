@@ -55,6 +55,9 @@ export const PostItem = styled.div`
       filter: saturate(100%);
     }
   }
+  @media (max-width: 1200px) {
+    padding: 1rem;
+  }
 `;
 
 export const PostInfo = styled.div`

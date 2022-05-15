@@ -14,7 +14,11 @@ import {
 } from "../components/tabloids";
 import { CategorySchema } from "../lib/types";
 import { customAxios } from "../lib/hooks/useAxiosInterceptor";
-import { CenteringPositions, FlexRow } from "../components/containers";
+import {
+  CenteringPositions,
+  DisappearResponsiveCont,
+  FlexRow,
+} from "../components/containers";
 import ColorPalette from "../styles/ColorPalette";
 import { CommentCountHash, getCommentCountHash } from "../lib/fetchUtils";
 import IconsList from "../styles/IconsList";
@@ -30,9 +34,6 @@ const SeeMoreLink = styled.a`
   border-radius: 4rem;
   @media (max-width: 1200px) {
     padding: 0.3rem 1rem;
-    .disappearResponsive {
-      display: none;
-    }
   }
 `;
 
@@ -57,7 +58,9 @@ function HomePage({
         <Link href={`/categories/${cat.id}`} passHref>
           <SeeMoreLink>
             <FontAwesomeIcon icon={faMagnifyingGlassPlus} />
-            <span className="disappearResponsive">&nbsp;&nbsp;See more</span>
+            <DisappearResponsiveCont>
+              &nbsp;&nbsp;See more
+            </DisappearResponsiveCont>
           </SeeMoreLink>
         </Link>
       </FlexRow>

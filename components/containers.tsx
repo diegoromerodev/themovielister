@@ -21,3 +21,9 @@ export const FlexRow = styled.div<FlexRowProps>`
 export const FlexColumn = styled(FlexRow)`
   flex-direction: "column";
 `;
+
+export const DisappearResponsiveCont = styled.span`
+  @media (max-width: 1200px) {
+    display: none;
+  }
+`;
