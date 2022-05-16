@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { createGlobalStyle } from "styled-components";
+import styled, { createGlobalStyle } from "styled-components";
 import { DisappearResponsiveCont } from "../components/containers";
 import GlobalErrors from "../components/GlobalErrors";
 import NavBar from "../components/NavBar";
@@ -21,15 +21,23 @@ const GlobalStyles = createGlobalStyle`
     }
 `;
 
+const StickyNavBarCont = styled.div`
+  position: sticky;
+  top: 0px;
+  z-index: 1;
+`;
+
 function Layout({ children }) {
   return (
     <>
       <GlobalStyles />
       <GlobalErrors />
-      <NavBar />
-      <DisappearResponsiveCont>
-        <SecondaryNav />
-      </DisappearResponsiveCont>
+      <StickyNavBarCont>
+        <NavBar />
+        <DisappearResponsiveCont>
+          <SecondaryNav />
+        </DisappearResponsiveCont>
+      </StickyNavBarCont>
       <main>{children}</main>
     </>
   );

@@ -7,13 +7,14 @@ import { AppDataContext } from "../lib/types";
 import ColorPalette from "../styles/ColorPalette";
 
 const LighterNavContainer = styled.aside`
-  background-color: ${ColorPalette.gray}7a;
+  background-color: ${ColorPalette.gray};
   display: flex;
-  padding: 0.5rem;
+  padding: 0.6rem;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
   margin: 0 auto;
+  box-shadow: 0 1px 0.5rem ${ColorPalette.darker};
   span {
     color: ${ColorPalette.light};
     text-decoration: none;
@@ -21,7 +22,7 @@ const LighterNavContainer = styled.aside`
     transition: all 0.2s ease-out;
     padding: 0.5rem 1rem;
     text-align: center;
-    background-color: ${ColorPalette.gray};
+    background-color: ${ColorPalette.lightGray}3a;
     border-radius: 5rem;
     cursor: pointer;
     border: 2px solid transparent;

@@ -19,6 +19,7 @@ const NavContainer = styled.nav`
   justify-content: space-between;
   align-items: center;
   position: relative;
+  box-shadow: 0 1px 0.5rem ${ColorPalette.darker};
   .grow {
     flex: 1;
   }
